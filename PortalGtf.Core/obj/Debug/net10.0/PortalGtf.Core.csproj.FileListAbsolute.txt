@@ -1,0 +1,12 @@
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/bin/Debug/net10.0/PortalGtf.Core.deps.json
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/bin/Debug/net10.0/PortalGtf.Core.dll
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/bin/Debug/net10.0/PortalGtf.Core.pdb
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.csproj.AssemblyReference.cache
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.AssemblyInfoInputs.cache
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.AssemblyInfo.cs
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.csproj.CoreCompileInputs.cache
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.dll
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/refint/PortalGtf.Core.dll
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.pdb
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/ref/PortalGtf.Core.dll

@@ -1,0 +1,9 @@
+namespace PortalGtf.Core.Entities;
+
+public class Estado
+{
+    public int Id { get; set; }
+    public string Nome { get; set; } = null!;
+    public string Sigla { get; set; } = null!;
+    public ICollection<Cidade> Cidades { get; set; } = new List<Cidade>();
+}

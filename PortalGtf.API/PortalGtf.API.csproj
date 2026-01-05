@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PortalGtf.Application\PortalGtf.Application.csproj" />
+      <ProjectReference Include="..\PortalGtf.Core\PortalGtf.Core.csproj" />
+      <ProjectReference Include="..\PortalGtf.Infrastructure\PortalGtf.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

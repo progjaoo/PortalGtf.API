@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalGtf.API", "PortalGtf.API\PortalGtf.API.csproj", "{349F89EF-D6DD-48BD-8F7B-D9F379735A72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalGtf.Core", "PortalGtf.Core\PortalGtf.Core.csproj", "{32544D20-F955-4721-9C58-2ED0A1EDDE29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalGtf.Application", "PortalGtf.Application\PortalGtf.Application.csproj", "{70A95C47-467F-4BB9-A5FB-41D7F62F2418}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalGtf.Infrastructure", "PortalGtf.Infrastructure\PortalGtf.Infrastructure.csproj", "{771F6B1D-A963-432E-83BF-8901633B3BBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{349F89EF-D6DD-48BD-8F7B-D9F379735A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{349F89EF-D6DD-48BD-8F7B-D9F379735A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{349F89EF-D6DD-48BD-8F7B-D9F379735A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{349F89EF-D6DD-48BD-8F7B-D9F379735A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32544D20-F955-4721-9C58-2ED0A1EDDE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32544D20-F955-4721-9C58-2ED0A1EDDE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32544D20-F955-4721-9C58-2ED0A1EDDE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32544D20-F955-4721-9C58-2ED0A1EDDE29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A95C47-467F-4BB9-A5FB-41D7F62F2418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A95C47-467F-4BB9-A5FB-41D7F62F2418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A95C47-467F-4BB9-A5FB-41D7F62F2418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A95C47-467F-4BB9-A5FB-41D7F62F2418}.Release|Any CPU.Build.0 = Release|Any CPU
+		{771F6B1D-A963-432E-83BF-8901633B3BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{771F6B1D-A963-432E-83BF-8901633B3BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{771F6B1D-A963-432E-83BF-8901633B3BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{771F6B1D-A963-432E-83BF-8901633B3BBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

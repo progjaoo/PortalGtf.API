@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PortalGtf.Application\PortalGtf.Application.csproj" />
+      <ProjectReference Include="..\PortalGtf.Core\PortalGtf.Core.csproj" />
+    </ItemGroup>
+
+</Project>
