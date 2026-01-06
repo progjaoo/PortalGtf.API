@@ -13,11 +13,11 @@ public class PortalGtfNewsDbContext : DbContext
     public DbSet<Emissora> Emissora => Set<Emissora>();
     public DbSet<EmissoraRegiao> EmissoraRegioe => Set<EmissoraRegiao>();
     public DbSet<Estado> Estado => Set<Estado>();
-    public DbSet<Funcao> Funcoe => Set<Funcao>();
+    public DbSet<Funcao> Funcao => Set<Funcao>();
     public DbSet<FuncaoPermissao> FuncaoPermissoe => Set<FuncaoPermissao>();
     public DbSet<Newsletter> Newsletter => Set<Newsletter>();
     public DbSet<Notificacao> Notificacoe => Set<Notificacao>();
-    public DbSet<Permissao> Permissoe => Set<Permissao>();
+    public DbSet<Permissao> Permissao => Set<Permissao>();
     public DbSet<Post> Post => Set<Post>();
     public DbSet<PostComentario> PostComentario => Set<PostComentario>();
     public DbSet<PostHistorico> PostHistorico => Set<PostHistorico>();

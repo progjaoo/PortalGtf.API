@@ -7,7 +7,6 @@ namespace PortalGtf.Application.Services.RegiaoServices;
 public class RegiaoService : IRegiaoService
 {
     private readonly IRegiaoRepository _regiaoRepository;
-
     public RegiaoService(IRegiaoRepository regiaoRepository)
     {
         _regiaoRepository = regiaoRepository;
@@ -22,7 +21,6 @@ public class RegiaoService : IRegiaoService
             Nome = r.Nome
         }).ToList();
     }
-
     public async Task<RegiaoViewModel?> GetByIdAsync(int id)
     {
         var regiao = await _regiaoRepository.GetByIdAsync(id);

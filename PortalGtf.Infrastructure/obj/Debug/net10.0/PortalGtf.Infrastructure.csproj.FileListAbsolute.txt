@@ -15,3 +15,4 @@
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Infrastructure/obj/Debug/net10.0/ref/PortalGtf.Infrastructure.dll
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Infrastructure/bin/Debug/net10.0/PortalGtf.Application.dll
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Infrastructure/bin/Debug/net10.0/PortalGtf.Application.pdb
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Infrastructure/obj/Debug/net10.0/PortalGtf.Infrastructure.sourcelink.json

@@ -53,3 +53,4 @@
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/obj/Debug/net10.0/PortalGtf.API.pdb
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/obj/Debug/net10.0/PortalGtf.API.genruntimeconfig.cache
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/obj/Debug/net10.0/ref/PortalGtf.API.dll
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/obj/Debug/net10.0/PortalGtf.API.sourcelink.json

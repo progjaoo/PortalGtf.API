@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PortalGtf.Application.Services.AuthServices;
+using PortalGtf.Application.Services.EmissoraServices;
+using PortalGtf.Application.Services.FuncaoServices;
+using PortalGtf.Application.Services.PermissaoServices;
 using PortalGtf.Application.Services.RegiaoServices;
 using PortalGtf.Application.Services.TemaEditorialServices;
 using PortalGtf.Application.Services.UsuarioServices;
@@ -23,7 +26,6 @@ builder.Services.AddDbContext<PortalGtfNewsDbContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 });
-
 // Repositories
 builder.Services.AddScoped<IRegiaoRepository, RegiaoRepository>();
 builder.Services.AddScoped<IRegiaoService, RegiaoService>();
@@ -35,6 +37,15 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<IFuncaoRepository, FuncaoRepository>();
+builder.Services.AddScoped<IFuncaoService, FuncaoService>();
+
+builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
+builder.Services.AddScoped<IPermissaoService, PermissaoService>();
+
+builder.Services.AddScoped<IEmissoraRepository, EmissoraRepository>();
+builder.Services.AddScoped<IEmissoraService, EmissoraService>();
 
 builder.Services.AddCors(options =>
 {

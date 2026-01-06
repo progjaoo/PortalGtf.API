@@ -10,3 +10,4 @@
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/refint/PortalGtf.Core.dll
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.pdb
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/ref/PortalGtf.Core.dll
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/Debug/net10.0/PortalGtf.Core.sourcelink.json

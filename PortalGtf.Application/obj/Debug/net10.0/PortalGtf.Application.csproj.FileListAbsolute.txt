@@ -13,3 +13,4 @@
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Application/obj/Debug/net10.0/refint/PortalGtf.Application.dll
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Application/obj/Debug/net10.0/PortalGtf.Application.pdb
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.Application/obj/Debug/net10.0/ref/PortalGtf.Application.dll
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Application/obj/Debug/net10.0/PortalGtf.Application.sourcelink.json
