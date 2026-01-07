@@ -20,9 +20,13 @@ public class Post
     public Usuario UsuarioCriacao { get; set; } = null!;
     public int UsuarioAprovacaoId { get; set; }
     public Usuario UsuarioAprovacao { get; set; } = null!;
+    
     public StatusPost StatusPost { get; set; }
+    
     public DateTime DataCriacao { get; set; }
+    
     public DateTime? DataAprovacao { get; set; }
+    
     public DateTime? DataEdicao { get; set; }
     
     public DateTime? PublicadoEm { get; set; }
