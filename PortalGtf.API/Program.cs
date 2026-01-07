@@ -6,13 +6,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PortalGtf.Application.Services.AuthServices;
+using PortalGtf.Application.Services.CidadeService;
 using PortalGtf.Application.Services.EditorialServices;
+using PortalGtf.Application.Services.EmissoraRegiaoServices;
 using PortalGtf.Application.Services.EmissoraServices;
 using PortalGtf.Application.Services.EstadoServices;
 using PortalGtf.Application.Services.FuncaoServices;
 using PortalGtf.Application.Services.PermissaoServices;
 using PortalGtf.Application.Services.RegiaoServices;
 using PortalGtf.Application.Services.TemaEditorialServices;
+using PortalGtf.Application.Services.UsuarioEmissoarServices;
 using PortalGtf.Application.Services.UsuarioServices;
 using PortalGtf.Core.Entities;
 
@@ -45,7 +48,17 @@ builder.Services.AddScoped<IEditorialService, EditorialService>();
 builder.Services.AddScoped<IEditorialRepository, EditorialRepository>();
 builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
 builder.Services.AddScoped<IEstadoService, EstadoService>();
+builder.Services.AddScoped<ICidadeService, CidadeService>();
+builder.Services.AddScoped<ICidadeRepository, CidadeRepository>();
 
+builder.Services.AddScoped<IFuncaoPermissaoRepository, FuncaoPermissaoRepository>();
+builder.Services.AddScoped<IFuncaoService, FuncaoService>();
+
+builder.Services.AddScoped<IEmissoraRegiaoRepository, EmissoraRegiaoRepository>();
+builder.Services.AddScoped<IEmissoraRegiaoService, EmissoraRegiaoService>();
+
+builder.Services.AddScoped<IUsuarioEmissoraRepository, UsuarioEmissoraRepository>();
+builder.Services.AddScoped<IUsuarioEmissoraService, UsuarioEmissoraService>();
 
 builder.Services.AddCors(options =>
 {
@@ -57,7 +70,6 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
-
 #region AUTENTICACAO JWT BEARER
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -25,7 +25,8 @@ public class UsuarioRepository : IUsuarioRepository
     {
         return await _context.Usuario
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Id == id);
+            .Include(u => u.Funcao)
+            .SingleOrDefaultAsync(u => u.Id == id);
     }
     public async Task AddAsync(Usuario usuario)
     {

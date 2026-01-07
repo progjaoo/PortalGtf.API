@@ -42,7 +42,9 @@ public class UsuarioService : IUsuarioService
             Id = usuario.Id,
             Email = usuario.Email,
             NomeCompleto = usuario.NomeCompleto,
-            StatusUsuario = usuario.StatusUsuario
+            StatusUsuario = usuario.StatusUsuario,
+            FuncaoId =  usuario.FuncaoId,
+            NomeFuncao = usuario.Funcao.TipoFuncao
         };
     }
 

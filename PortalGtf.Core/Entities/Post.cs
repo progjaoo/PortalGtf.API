@@ -1,3 +1,5 @@
+using PortalGtf.Core.Enums;
+
 namespace PortalGtf.Core.Entities;
 
 public class Post
@@ -18,14 +20,12 @@ public class Post
     public Usuario UsuarioCriacao { get; set; } = null!;
     public int UsuarioAprovacaoId { get; set; }
     public Usuario UsuarioAprovacao { get; set; } = null!;
-
-    public int StatusPost { get; set; }
-
+    public StatusPost StatusPost { get; set; }
     public DateTime DataCriacao { get; set; }
     public DateTime? DataAprovacao { get; set; }
     public DateTime? DataEdicao { get; set; }
+    
     public DateTime? PublicadoEm { get; set; }
-
     public ICollection<PostImagem> Imagens { get; set; } = new List<PostImagem>();
     public ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
     public ICollection<PostVisualizacao> Visualizacoes { get; set; } = new List<PostVisualizacao>();
