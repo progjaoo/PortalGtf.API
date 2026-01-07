@@ -1,5 +1,4 @@
 using System.Text;
-using PortalGtf.Core;
 using PortalGtf.Core.Interfaces;
 using PortalGtf.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +6,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PortalGtf.Application.Services.AuthServices;
+using PortalGtf.Application.Services.EditorialServices;
 using PortalGtf.Application.Services.EmissoraServices;
+using PortalGtf.Application.Services.EstadoServices;
 using PortalGtf.Application.Services.FuncaoServices;
 using PortalGtf.Application.Services.PermissaoServices;
 using PortalGtf.Application.Services.RegiaoServices;
@@ -29,23 +30,22 @@ builder.Services.AddDbContext<PortalGtfNewsDbContext>(options =>
 // Repositories
 builder.Services.AddScoped<IRegiaoRepository, RegiaoRepository>();
 builder.Services.AddScoped<IRegiaoService, RegiaoService>();
-
 builder.Services.AddScoped<ITemaEditorialRepository, TemaEditorialRepository>();
 builder.Services.AddScoped<ITemaEditorialService, TemaEditorialService>();
-
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-
 builder.Services.AddScoped<IAuthService, AuthService>();
-
 builder.Services.AddScoped<IFuncaoRepository, FuncaoRepository>();
 builder.Services.AddScoped<IFuncaoService, FuncaoService>();
-
 builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
 builder.Services.AddScoped<IPermissaoService, PermissaoService>();
-
 builder.Services.AddScoped<IEmissoraRepository, EmissoraRepository>();
 builder.Services.AddScoped<IEmissoraService, EmissoraService>();
+builder.Services.AddScoped<IEditorialService, EditorialService>();
+builder.Services.AddScoped<IEditorialRepository, EditorialRepository>();
+builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
+builder.Services.AddScoped<IEstadoService, EstadoService>();
+
 
 builder.Services.AddCors(options =>
 {
@@ -57,6 +57,7 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
 #region AUTENTICACAO JWT BEARER
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -119,6 +120,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();

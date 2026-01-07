@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PortalGtf.Application.Services.RegiaoServices;
 using PortalGtf.Application.ViewModels.RegiaoVM;
-using PortalGtf.Infrastructure.Repositories;
 
 namespace PortalGtf.API.Controllers;
 
@@ -9,9 +8,8 @@ namespace PortalGtf.API.Controllers;
 [Route("api/regiao")]
 public class RegiaoController : ControllerBase
 {
-    private readonly RegiaoService _regiaoService;
-
-    public RegiaoController(RegiaoService regiaoService)
+    private readonly IRegiaoService _regiaoService;
+    public RegiaoController(IRegiaoService regiaoService)
     {
         _regiaoService = regiaoService;
     }
@@ -30,14 +28,12 @@ public class RegiaoController : ControllerBase
 
         return Ok(regiao);
     }
-
     [HttpPost("criarRegiao")]
     public async Task<IActionResult> Create([FromBody] RegiaoCreateViewModel model)
     {
         await _regiaoService.CreateAsync(model);
         return CreatedAtAction(nameof(GetAll), null);
     }
-
     [HttpPut("{id}/atualizarRegiao")]
     public async Task<IActionResult> Update(int id, [FromBody] RegiaoCreateViewModel model)
     {

@@ -11,6 +11,7 @@ public class RegiaoService : IRegiaoService
     {
         _regiaoRepository = regiaoRepository;
     }
+
     public async Task<List<RegiaoViewModel>> GetAllAsync()
     {
         var regioes = await _regiaoRepository.GetAllAsync();

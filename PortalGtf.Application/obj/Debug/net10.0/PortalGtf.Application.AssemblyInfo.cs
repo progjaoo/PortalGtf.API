@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PortalGtf.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+881085ee4497e031561cbbcfe19dc8c1d6f139ef")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a2607ddc954a9671c496c1ff8bb51bf6d329fbf")]
 [assembly: System.Reflection.AssemblyProductAttribute("PortalGtf.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PortalGtf.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

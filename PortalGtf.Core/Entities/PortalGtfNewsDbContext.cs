@@ -9,7 +9,7 @@ public class PortalGtfNewsDbContext : DbContext
 
     public DbSet<Cidade> Cidade => Set<Cidade>();
     public DbSet<Comentario> Comentario => Set<Comentario>();
-    public DbSet<Editorial> Editoriai => Set<Editorial>();
+    public DbSet<Editorial> Editorial => Set<Editorial>();
     public DbSet<Emissora> Emissora => Set<Emissora>();
     public DbSet<EmissoraRegiao> EmissoraRegioe => Set<EmissoraRegiao>();
     public DbSet<Estado> Estado => Set<Estado>();
