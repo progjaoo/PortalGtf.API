@@ -11,5 +11,10 @@ public class EmissoraViewModel
     public string Bairro { get; set; } = null!;
     public string Estado { get; set; } = null!;
     public string Cidade { get; set; } = null!;
+    public string Slug { get; set; } = null!;
+    public string Logo { get; set; } = null!;
+    public string LogoSmall { get; set; } = null!;
+    public string TemaPrincipal { get; set; } = null!;
+
     public bool Ativa { get; set; }
 }

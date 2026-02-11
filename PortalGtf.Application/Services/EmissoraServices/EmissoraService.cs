@@ -27,6 +27,7 @@ public class EmissoraService : IEmissoraService
             Bairro = e.Bairro,
             Estado = e.Estado,
             Cidade = e.Cidade,
+            Slug = e.Slug,
             Ativa = e.Ativa
         }).ToList();
     }
@@ -48,10 +49,12 @@ public class EmissoraService : IEmissoraService
             Bairro = emissora.Bairro,
             Estado = emissora.Estado,
             Cidade = emissora.Cidade,
+            Logo = emissora.Logo,
+            LogoSmall =  emissora.LogoSmall,
+            TemaPrincipal =  emissora.TemaPrincipal,
             Ativa = emissora.Ativa
         };
     }
-
     public async Task<int> CreateAsync(EmissoraCreateViewModel model)
     {
         var emissora = new Emissora
@@ -64,6 +67,7 @@ public class EmissoraService : IEmissoraService
             Bairro = model.Bairro,
             Estado = model.Estado,
             Cidade = model.Cidade,
+            Slug = model.Slug,
             Ativa = model.Ativa
         };
         await _emissoraRepository.AddAsync(emissora);
@@ -84,6 +88,7 @@ public class EmissoraService : IEmissoraService
         emissora.Bairro = model.Bairro;
         emissora.Estado = model.Estado;
         emissora.Cidade = model.Cidade;
+        emissora.Slug = model.Slug;
         emissora.Ativa = model.Ativa;
         
         await _emissoraRepository.UpdateAsync(emissora);
