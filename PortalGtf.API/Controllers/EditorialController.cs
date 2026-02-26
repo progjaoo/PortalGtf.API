@@ -17,7 +17,7 @@ public class EditorialController : ControllerBase
     /// <summary>
     /// Retorna uma Editorial pelo Id
     /// </summary>
-    [HttpGet("{id:int}/buscarPorId")]
+    [HttpGet("buscarPorId/{id:int}")]
     public async Task<ActionResult<EditorialViewModel>> GetById(int id)
     {
         var editorial = await _editorialService.GetByIdAsync(id);

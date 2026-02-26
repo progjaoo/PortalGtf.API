@@ -1,4 +1,5 @@
 using PortalGtf.Application.Services.AuthServices;
+using PortalGtf.Application.ViewModels.LoginVM;
 using PortalGtf.Application.ViewModels.UsuarioVM;
 using PortalGtf.Core.Entities;
 using PortalGtf.Core.Enums;
@@ -31,7 +32,11 @@ public class UsuarioService : IUsuarioService
             StatusUsuario = u.StatusUsuario
         });
     }
-
+    
+    public async Task<LoginResponseViewModel?> LoginUserAsync(LoginRequestViewModel model)
+    {
+        return await _authService.LoginAsync(model);
+    }
     public async Task<UsuarioResponseViewModel?> GetByIdAsync(int id)
     {
         var usuario = await _usuarioRepository.GetByIdAsync(id);

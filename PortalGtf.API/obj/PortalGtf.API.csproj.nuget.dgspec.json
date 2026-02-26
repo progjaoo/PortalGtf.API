@@ -55,6 +55,10 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "FluentFTP": {
+              "target": "Package",
+              "version": "[53.0.2, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[10.0.1, )"

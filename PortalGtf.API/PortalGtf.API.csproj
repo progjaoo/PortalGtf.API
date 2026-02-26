@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentFTP" Version="53.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
@@ -18,6 +19,10 @@
       <ProjectReference Include="..\PortalGtf.Application\PortalGtf.Application.csproj" />
       <ProjectReference Include="..\PortalGtf.Core\PortalGtf.Core.csproj" />
       <ProjectReference Include="..\PortalGtf.Infrastructure\PortalGtf.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
     </ItemGroup>
 
 </Project>

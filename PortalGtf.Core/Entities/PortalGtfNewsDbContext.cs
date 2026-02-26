@@ -21,7 +21,7 @@ public class PortalGtfNewsDbContext : DbContext
     public DbSet<Post> Post => Set<Post>();
     public DbSet<PostComentario> PostComentario => Set<PostComentario>();
     public DbSet<PostHistorico> PostHistorico => Set<PostHistorico>();
-    public DbSet<PostImagem> PostImagen => Set<PostImagem>();
+    public DbSet<PostImagem> PostImagem => Set<PostImagem>();
     public DbSet<PostTag> PostTag => Set<PostTag>();
     public DbSet<PostVisualizacao> PostVisualizacao => Set<PostVisualizacao>();
     public DbSet<Regiao> Regiao => Set<Regiao>();

@@ -13,7 +13,9 @@ using PortalGtf.Application.Services.EmissoraServices;
 using PortalGtf.Application.Services.EstadoServices;
 using PortalGtf.Application.Services.FuncaoServices;
 using PortalGtf.Application.Services.PermissaoServices;
+using PortalGtf.Application.Services.PostServices;
 using PortalGtf.Application.Services.RegiaoServices;
+using PortalGtf.Application.Services.StreamingServices;
 using PortalGtf.Application.Services.TemaEditorialServices;
 using PortalGtf.Application.Services.UsuarioEmissoarServices;
 using PortalGtf.Application.Services.UsuarioServices;
@@ -30,24 +32,34 @@ builder.Services.AddDbContext<PortalGtfNewsDbContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 });
+
 // Repositories
+#region REPOSITORYES AND SERVICES
 builder.Services.AddScoped<IRegiaoRepository, RegiaoRepository>();
 builder.Services.AddScoped<IRegiaoService, RegiaoService>();
+
 builder.Services.AddScoped<ITemaEditorialRepository, TemaEditorialRepository>();
 builder.Services.AddScoped<ITemaEditorialService, TemaEditorialService>();
+
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddScoped<IFuncaoRepository, FuncaoRepository>();
 builder.Services.AddScoped<IFuncaoService, FuncaoService>();
+
 builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
 builder.Services.AddScoped<IPermissaoService, PermissaoService>();
+
 builder.Services.AddScoped<IEmissoraRepository, EmissoraRepository>();
 builder.Services.AddScoped<IEmissoraService, EmissoraService>();
+
 builder.Services.AddScoped<IEditorialService, EditorialService>();
 builder.Services.AddScoped<IEditorialRepository, EditorialRepository>();
+
 builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
 builder.Services.AddScoped<IEstadoService, EstadoService>();
+
 builder.Services.AddScoped<ICidadeService, CidadeService>();
 builder.Services.AddScoped<ICidadeRepository, CidadeRepository>();
 
@@ -60,6 +72,17 @@ builder.Services.AddScoped<IEmissoraRegiaoService, EmissoraRegiaoService>();
 builder.Services.AddScoped<IUsuarioEmissoraRepository, UsuarioEmissoraRepository>();
 builder.Services.AddScoped<IUsuarioEmissoraService, UsuarioEmissoraService>();
 
+builder.Services.AddScoped<IStreamingRepository, StreamingRepository>();
+builder.Services.AddScoped<IStreamingService, StreamingService>();
+
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IPostService, PostService>();
+
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+
+
+#endregion 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
@@ -70,11 +93,13 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
 #region AUTENTICACAO JWT BEARER
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -119,10 +144,11 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            new string[] { }
         }
     });
 });
+
 #endregion
 
 var app = builder.Build();
@@ -132,10 +158,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseCors("CorsPolicy");
 
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

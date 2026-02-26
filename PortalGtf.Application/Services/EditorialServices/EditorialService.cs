@@ -39,6 +39,7 @@ public class EditorialService : IEditorialService
         var editorial = new Editorial
         {
             TipoPostagem = model.TipoPostagem,
+            TemaEditorialId =  model.TemaEditorialId
         };
         await _editorialRepository.AddAsync(editorial);
         return editorial.Id;

@@ -9,6 +9,5 @@ public class Editorial
     public int TemaEditorialId { get; set; }
 
     public TemaEditorial TemaEditorial { get; set; } = null!;
-
     public ICollection<Post> Posts { get; set; } = new List<Post>();
 }

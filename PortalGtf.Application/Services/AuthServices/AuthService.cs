@@ -21,7 +21,6 @@ public class AuthService : IAuthService
         _configuration = configuration;
         _userRepository = userRepository;
     }
-
     public async Task<LoginResponseViewModel?> LoginAsync(LoginRequestViewModel model)
     {
         var passwordHash = ComputeSha256Hash(model.Senha);
@@ -41,6 +40,7 @@ public class AuthService : IAuthService
         await _userRepository.UpdateAsync(user);
 
         var token = GenerateJwtToken(
+            user.Id,
             user.Email,
             user.Funcao.TipoFuncao 
         );
@@ -53,8 +53,7 @@ public class AuthService : IAuthService
             Funcao = user.Funcao.TipoFuncao
         };
     }
-    
-    public string GenerateJwtToken(string email, string role)
+    public string GenerateJwtToken(int userId, string email, string role)
     {
         var issuer = _configuration["Jwt:Issuer"];
         var audience = _configuration["Jwt:Audience"];
@@ -71,6 +70,7 @@ public class AuthService : IAuthService
 
         var claims = new List<Claim>
         {
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, email),
             new Claim(JwtRegisteredClaimNames.Email, email),
             new Claim(ClaimTypes.Role, role),

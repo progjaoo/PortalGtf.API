@@ -1,3 +1,5 @@
+using PortalGtf.Core.Enums;
+
 namespace PortalGtf.Core.Entities;
 
 public class PostImagem
@@ -7,4 +9,5 @@ public class PostImagem
     public Post Post { get; set; } = null!;
     public string UrlPost { get; set; } = null!;
     public int Ordem { get; set; }
+    public TipoMidia Tipo { get; set; }
 }

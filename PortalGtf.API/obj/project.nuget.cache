@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "e5zp2KXh3wU=",
+  "dgSpecHash": "PAzbdQkZX/c=",
   "success": true,
   "projectFilePath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/PortalGtf.API.csproj",
   "expectedPackageFiles": [
+    "/Users/joaomvalente/.nuget/packages/fluentftp/53.0.2/fluentftp.53.0.2.nupkg.sha512",
     "/Users/joaomvalente/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/10.0.1/microsoft.aspnetcore.authentication.jwtbearer.10.0.1.nupkg.sha512",
     "/Users/joaomvalente/.nuget/packages/microsoft.aspnetcore.openapi/8.0.5/microsoft.aspnetcore.openapi.8.0.5.nupkg.sha512",
     "/Users/joaomvalente/.nuget/packages/microsoft.entityframeworkcore/9.0.0/microsoft.entityframeworkcore.9.0.0.nupkg.sha512",
