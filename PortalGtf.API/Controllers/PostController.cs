@@ -24,6 +24,23 @@ namespace PortalGtf.API.Controllers
             var result = await _service.GetAllAsync();
             return Ok(result);
         }
+        [HttpGet("regiao/{regiaoId}")]
+        public async Task<IActionResult> GetByRegiao(
+            int regiaoId,
+            int page = 1,
+            int pageSize = 10)
+        {
+            var result = await _service
+                .GetPostsByRegiaoAsync(regiaoId, page, pageSize);
+
+            return Ok(result);
+        }
+        [HttpGet("mais-recentes")]
+        public async Task<IActionResult> GetAllByRecents()
+        {
+            var result = await _service.GetAllAsync();
+            return Ok(result);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -64,6 +81,18 @@ namespace PortalGtf.API.Controllers
         public async Task<IActionResult> GetByStatus([FromQuery] StatusPost statusPost)
         {
             var result = await _service.GetByStatusAsync(statusPost);
+            return Ok(result);
+        }
+        [HttpGet("buscarPorEmissora/{emissoraId}")]
+        public async Task<IActionResult> GetAllByEmissora([FromQuery] int emissoraId)
+        {
+            var result = await _service.GetAllPostsByEmissora(emissoraId);
+            return Ok(result);
+        }
+        [HttpGet("buscarPorSubcategory/{subcategoryId}")]
+        public async Task<IActionResult> GetBySubcategory(int subcategoryId)
+        {
+            var result = await _service.GetBySubcategoryAsync(subcategoryId);
             return Ok(result);
         }
         /// <summary>
@@ -121,15 +150,13 @@ namespace PortalGtf.API.Controllers
             await _service.EnviarParaRevisaoAsync(id);
             return Ok(new { message = "Post enviado para revisão" });
         }
-        
         [HttpPut("{id}/aprovar")]
-        public async Task<IActionResult> Aprovar(int id) //todo: vai aparecer para quem aprovará a postagem
+        public async Task<IActionResult> Aprovar(int id) // ToDo: vai aparecer para quem aprovará a postagem
         {
             await _service.AprovarPostAsync(id);
 
             return Ok(new { message = "Post aprovado e publicado" });
         }
-        
         [HttpPut("{id}/rejeitar")]
         public async Task<IActionResult> Rejeitar(int id)
         {

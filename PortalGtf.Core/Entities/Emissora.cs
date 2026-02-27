@@ -16,7 +16,6 @@ public class Emissora
     public string LogoSmall { get; set; } = null!;
     public string TemaPrincipal { get; set; } = null!;
     public bool Ativa { get; set; }
-
     public ICollection<Post> Posts { get; set; } = new List<Post>();
     public ICollection<UsuarioEmissora> UsuarioEmissoras { get; set; } = new List<UsuarioEmissora>();
     public ICollection<Streaming> Streamings { get; set; } = new List<Streaming>();

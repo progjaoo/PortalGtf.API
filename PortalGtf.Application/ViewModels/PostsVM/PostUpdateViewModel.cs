@@ -9,5 +9,6 @@ public class PostUpdateViewModel
     public string Conteudo { get; set; } = null!;
     public string Imagem { get; set; } = null!;
     public int EditorialId { get; set; }
+    public int SubcategoriaId { get; set; }
     public StatusPost StatusPost { get; set; }
 }

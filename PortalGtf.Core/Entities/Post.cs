@@ -15,7 +15,9 @@ public class Post
     public int EmissoraId { get; set; }
     public Emissora Emissora { get; set; } = null!;
     public int CidadeId { get; set; }
-    public Cidade Cidade { get; set; } = null!; 
+    public Cidade Cidade { get; set; } = null!;
+    public int? SubcategoriaId { get; set; }
+    public Subcategoria? Subcategoria { get; set; }
     public int UsuarioCriacaoId { get; set; }
     public Usuario UsuarioCriacao { get; set; } 
     public int? UsuarioAprovacaoId { get; set; }

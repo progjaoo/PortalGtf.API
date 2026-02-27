@@ -56,3 +56,4 @@
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/obj/Debug/net10.0/PortalGtf.API.sourcelink.json
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/bin/Debug/net10.0/PortalGtf.API.staticwebassets.runtime.json
 /Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/bin/Debug/net10.0/FluentFTP.dll
+/Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/bin/Debug/net10.0/DocAPI.json

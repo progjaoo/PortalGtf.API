@@ -6,7 +6,8 @@ public class PortalGtfNewsDbContext : DbContext
 {
     public PortalGtfNewsDbContext(DbContextOptions<PortalGtfNewsDbContext> options)
         : base(options) { }
-
+    
+    public DbSet<Subcategoria> Subcategoria => Set<Subcategoria>();
     public DbSet<Cidade> Cidade => Set<Cidade>();
     public DbSet<Comentario> Comentario => Set<Comentario>();
     public DbSet<Editorial> Editorial => Set<Editorial>();
@@ -30,6 +31,7 @@ public class PortalGtfNewsDbContext : DbContext
     public DbSet<TemaEditorial> TemaEditorial => Set<TemaEditorial>();
     public DbSet<Usuario> Usuario => Set<Usuario>();
     public DbSet<UsuarioEmissora> UsuarioEmissora => Set<UsuarioEmissora>();
+    public DbSet<Midia> Midia => Set<Midia>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -79,7 +81,6 @@ public class PortalGtfNewsDbContext : DbContext
                 .HasConversion<int>()
                 .IsRequired();
         });
-        
         /* ============================
          * LOCALIZAÇÃO
          * ============================ */
@@ -147,7 +148,17 @@ public class PortalGtfNewsDbContext : DbContext
             .WithMany()
             .HasForeignKey(p => p.UsuarioAprovacaoId)
             .OnDelete(DeleteBehavior.Restrict);
-
+        
+        modelBuilder.Entity<Subcategoria>()
+            .HasOne(s => s.Editorial)
+            .WithMany(e => e.Subcategorias)
+            .HasForeignKey(s => s.EditorialId);
+        
+        modelBuilder.Entity<Post>()
+            .HasOne(p => p.Subcategoria)
+            .WithMany(s => s.Posts)
+            .HasForeignKey(p => p.SubcategoriaId)
+            .OnDelete(DeleteBehavior.SetNull);
         /* ============================
          * POST / TAG (N:N)
          * ============================ */
@@ -172,7 +183,16 @@ public class PortalGtfNewsDbContext : DbContext
             .WithMany(p => p.Imagens)
             .HasForeignKey(pi => pi.PostId)
             .OnDelete(DeleteBehavior.Cascade);
-
+        /*
+         * RELAÇÃO DE MEDIA LIBRARY COM CMS
+         */
+        modelBuilder.Entity<PostImagem>()
+            .HasOne(pi => pi.Midia)
+            .WithMany(m => m.PostImagens)
+            .HasForeignKey(pi => pi.MidiaId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        
         /* ============================
          * POST HISTÓRICO
          * ============================ */

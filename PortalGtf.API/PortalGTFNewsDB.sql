@@ -227,7 +227,7 @@ CREATE TABLE `Tag` (
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Slug` (`Slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+ 
 CREATE TABLE `TemaEditorial` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `Descricao` varchar(255) NOT NULL,
@@ -265,3 +265,38 @@ CREATE TABLE `UsuarioEmissora` (
   CONSTRAINT `FK_UE_Funcao` FOREIGN KEY (`FuncaoId`) REFERENCES `Funcao` (`Id`),
   CONSTRAINT `FK_UE_Usuario` FOREIGN KEY (`UsuarioId`) REFERENCES `Usuario` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- ALTERAÇÕES NO SCRIPT MANUALMENTE
+
+CREATE TABLE Subcategoria (
+                              Id INT AUTO_INCREMENT PRIMARY KEY,
+                              Nome VARCHAR(150) NOT NULL,
+                              Slug VARCHAR(150) NOT NULL,
+                              EditorialId INT NOT NULL,
+                              CONSTRAINT FK_Subcategoria_Editorial
+                                  FOREIGN KEY (EditorialId)
+                                      REFERENCES Editorial(Id)
+                                      ON DELETE CASCADE                           
+);
+
+CREATE INDEX IX_Subcategoria_EditorialId
+    ON Subcategoria(EditorialId);
+
+
+/* ============================================================
+   mudança relacionada ao pedido: vínculo SubCategoria no Post
+   ============================================================ */
+
+ALTER TABLE Post
+    ADD COLUMN SubcategoriaId INT NULL;
+
+ALTER TABLE Post
+    ADD CONSTRAINT FK_Post_Subcategoria
+        FOREIGN KEY (SubcategoriaId)
+            REFERENCES Subcategoria(Id)
+            ON DELETE SET NULL;
+
+CREATE INDEX IX_Post_SubcategoriaId
+    ON Post(SubcategoriaId);
+

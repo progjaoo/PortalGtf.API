@@ -16,6 +16,7 @@ public class PostDetailViewModel
     public int UsuarioCriacaoId { get; set; }
     public string UsuarioCriacao { get; set; }
     public string Editorial { get; set; } = null!;
+    public string Subcategoria { get; set; } = null!;
     public string Emissora { get; set; } = null!;
     public string Cidade { get; set; } = null!;
 

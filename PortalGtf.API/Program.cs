@@ -12,10 +12,12 @@ using PortalGtf.Application.Services.EmissoraRegiaoServices;
 using PortalGtf.Application.Services.EmissoraServices;
 using PortalGtf.Application.Services.EstadoServices;
 using PortalGtf.Application.Services.FuncaoServices;
+using PortalGtf.Application.Services.MidiaServices;
 using PortalGtf.Application.Services.PermissaoServices;
 using PortalGtf.Application.Services.PostServices;
 using PortalGtf.Application.Services.RegiaoServices;
 using PortalGtf.Application.Services.StreamingServices;
+using PortalGtf.Application.Services.SubcategoryServices;
 using PortalGtf.Application.Services.TemaEditorialServices;
 using PortalGtf.Application.Services.UsuarioEmissoarServices;
 using PortalGtf.Application.Services.UsuarioServices;
@@ -80,7 +82,11 @@ builder.Services.AddScoped<IPostService, PostService>();
 
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 
+builder.Services.AddScoped<ISubcategoriaService, SubcategoriaService>();
+builder.Services.AddScoped<ISubcategoriaRepository, SubcategoriaRepository>();
 
+builder.Services.AddScoped<IMidiaRepository, MidiaRepository>();
+builder.Services.AddScoped<IMidiaService, MidiaService>();
 #endregion 
 
 builder.Services.AddCors(options =>

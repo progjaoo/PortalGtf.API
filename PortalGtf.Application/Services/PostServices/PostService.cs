@@ -2,17 +2,19 @@ using PortalGtf.Application.ViewModels.PostsVM;
 using PortalGtf.Core.Entities;
 using PortalGtf.Core.Enums;
 using PortalGtf.Core.Interfaces;
+using PostResumeViewModel = PortalGtf.Application.ViewModels.PostsVM.PostResumeViewModel;
 
 namespace PortalGtf.Application.Services.PostServices;
 public class PostService : IPostService
 {
     private readonly IPostRepository _postRepository;
     private readonly ITagRepository _tagRepository;
-
-    public PostService(IPostRepository postRepository,ITagRepository tagRepository)
+    private readonly ISubcategoriaRepository _subcategoriaRepository;
+    public PostService(IPostRepository postRepository,ITagRepository tagRepository,  ISubcategoriaRepository subcategoriaRepository)
     {
         _postRepository = postRepository;
         _tagRepository = tagRepository;
+        _subcategoriaRepository = subcategoriaRepository;
     }
     private static PostListViewModel MapToListVM(Post p)
     {
@@ -23,7 +25,6 @@ public class PostService : IPostService
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
             Imagem = p.Imagem,
-            
             Emissora = p.Emissora?.NomeSocial,
             Status = p.StatusPost.ToString(),
             DataCriacao = p.DataCriacao,
@@ -53,11 +54,46 @@ public class PostService : IPostService
         };
     }
     // TODO: Realizar todos métodos services de GET`s de POST`s
+    public async Task<PagedResult<PostResumeViewModel>> GetPostsByRegiaoAsync(int regiaoId, int page, int pageSize)
+    {
+        if (page <= 0) page = 1;
+        if (pageSize <= 0 || pageSize > 50) pageSize = 10;
+
+        var (posts, totalCount) = await _postRepository.GetAllByRegiaoAsync(regiaoId, page, pageSize);
+
+        var result = posts.Select(p => new PostResumeViewModel
+        {
+            Id = p.Id,
+            Titulo = p.Titulo,
+            Subtitulo = p.Subtitulo,
+            Slug = p.Slug,
+            Imagem = p.Imagem,
+            PublicadoEm = p.PublicadoEm,
+        
+            Editorial = p.Editorial?.TipoPostagem, 
+            CorTema = p.Editorial?.TemaEditorial?.CorPrimaria, 
+            UsuarioCriacaoId = p.UsuarioCriacaoId,
+            UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto, 
+            Emissora = p.Emissora?.NomeSocial,
+            Cidade = p.Cidade?.Nome,
+        
+            EmissoraNome = p.Emissora?.NomeSocial,
+            EmissoraSlug = p.Emissora?.Slug,
+            EmissoraLogo = p.Emissora?.LogoSmall
+        }).ToList();
+
+        return new PagedResult<PostResumeViewModel>(result, totalCount, page, pageSize);
+    }
     public async Task<List<PostListViewModel>> GetAllAsync()
     {
         var posts = await _postRepository.GetAllAsync();
         return posts.Select(MapToListVM).ToList();
     }
+    public async Task<List<PostListViewModel>> GetAllByRecent()
+    {
+        var post = await _postRepository.GetAllByRecent();
+        return post.Select(MapToListVM).ToList();  
+    } 
     public async Task<PostDetailViewModel?> GetByIdAsync(int id)
     {
         var post = await _postRepository.GetByIdAsync(id);
@@ -74,6 +110,7 @@ public class PostService : IPostService
             Status = post.StatusPost,
             Editorial = post.Editorial?.TipoPostagem,
             Emissora = post.Emissora?.NomeSocial,
+            Subcategoria =  post.Subcategoria?.Nome,
             UsuarioCriacao = post.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = post.UsuarioCriacaoId,
             Cidade = post.Cidade?.Nome ?? "",
@@ -82,16 +119,28 @@ public class PostService : IPostService
             Tags = post.PostTags.Select(pt => pt.Tag.Nome).ToList()
         };
     }
-
     public async Task<List<PostListViewModel>> GetByEditorialAsync(int editorialId)
     {
         var posts = await _postRepository.GetByEditorialAsync(editorialId);
         return posts.Select(MapToListVM).ToList();
     }
+
+    public async Task<List<PostListViewModel>> GetBySubcategoryAsync(int subcategoryId)
+    {
+        var post = await _postRepository.GetBySubcategoryAsync(subcategoryId);
+        
+        return post.Select(MapToListVM).ToList();
+    }
     public async Task<List<PostListViewModel>> GetByUserAsync(string userName)
     {
         var posts = await _postRepository.GetByUserAsync(userName);
         return posts.Select(MapToListVM).ToList();
+    }
+
+    public async Task<List<PostListViewModel>> GetAllPostsByEmissora(int emissoraId)
+    {
+        var posts = await _postRepository.GetAllPostByEmissora(emissoraId);
+        return posts.Select(MapToListVM).ToList(); 
     }
 
     public async Task<List<PostListViewModel>> GetByStatusAsync(StatusPost status)
@@ -188,7 +237,6 @@ public class PostService : IPostService
 
         post.Imagens.Add(new PostImagem
         {
-            UrlPost = url,
             Ordem = post.Imagens.Count + 1,
             Tipo = TipoMidia.Imagem
         });
@@ -200,6 +248,17 @@ public class PostService : IPostService
     }
     public async Task CreateAsync(PostCreateViewModel model)
     {
+        if (model.SubcategoriaId.HasValue)
+        {
+            var subcategoria = await _subcategoriaRepository
+                .GetByIdAsync(model.SubcategoriaId.Value);
+
+            if (subcategoria == null)
+                throw new Exception("Subcategoria não encontrada.");
+
+            if (subcategoria.EditorialId != model.EditorialId)
+                throw new Exception("Subcategoria não pertence ao Editorial informado.");
+        }
         var post = new Post
         {
             Titulo = model.Titulo,
@@ -209,6 +268,7 @@ public class PostService : IPostService
             Slug = model.Slug,
             EditorialId = model.EditorialId,
             EmissoraId = model.EmissoraId,
+            SubcategoriaId = model.SubcategoriaId,
             CidadeId = model.CidadeId,
             UsuarioCriacaoId = model.UsuarioCriacaoId,
             UsuarioAprovacaoId = null,
@@ -248,7 +308,7 @@ public class PostService : IPostService
         {
             post.Imagens.Add(new PostImagem
             {
-                UrlPost = midia.Url,
+                MidiaId = midia.MidiaId,
                 Ordem = midia.Ordem,
                 Tipo = midia.Tipo
             });
@@ -268,6 +328,7 @@ public class PostService : IPostService
         post.Conteudo = model.Conteudo;
         post.Imagem = model.Imagem;
         post.EditorialId = model.EditorialId;
+        post.SubcategoriaId = model.SubcategoriaId;
         post.StatusPost = model.StatusPost;
         post.DataEdicao = DateTime.UtcNow;
 

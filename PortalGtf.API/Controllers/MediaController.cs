@@ -1,5 +1,6 @@
 using FluentFTP;
 using Microsoft.AspNetCore.Mvc;
+using PortalGtf.Application.Services.MidiaServices;
 
 namespace PortalGtf.API.Controllers;
 
@@ -8,12 +9,13 @@ namespace PortalGtf.API.Controllers;
 public class MediaController : ControllerBase
 {
     private readonly IWebHostEnvironment _env;
-
-    public MediaController(IWebHostEnvironment env)
+    private readonly IMidiaService _service;
+    public MediaController(IWebHostEnvironment env,  IMidiaService service)
     {
         _env = env;
+        _service = service;
     }
-    [HttpPost("upload")]
+    [HttpPost("uploadAntigo")]
     public async Task<IActionResult> Upload(IFormFile file)
     {
         if (file == null || file.Length == 0)
@@ -34,26 +36,29 @@ public class MediaController : ControllerBase
 
         return Ok(new { url });
     }
-    // [HttpPost("upload")]
-    // public async Task<string> UploadViaFtp(IFormFile file)
-    // {
-    //     var fileName = $"{Guid.NewGuid()}_{file.FileName}";
-    //     var tempPath = Path.GetTempFileName();
-    //
-    //     using (var stream = new FileStream(tempPath, FileMode.Create))
-    //     {
-    //         await file.CopyToAsync(stream);
-    //     }
-    //
-    //     using var client = new FtpClient("ftp.grupogtf.com.br", "grupogtf1", "");
-    //     client.Connect();
-    //
-    //     var remotePath = $"/public_html/uploads/{fileName}";
-    //
-    //     client.UploadFile(tempPath, remotePath);
-    //
-    //     client.Disconnect();
-    //
-    //     return $"https://grupogtf.com.br/uploads/{fileName}";
-    // }
+
+    [HttpPost("upload")]
+    public async Task<IActionResult> Upload(IFormFile file, int usuarioId)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("Arquivo inválido");
+
+        using var stream = file.OpenReadStream();
+
+        var url = await _service.UploadAsync(
+            stream,
+            file.FileName,
+            file.ContentType,
+            usuarioId
+        );
+
+        return Ok(new { url });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetPaged(int page = 1, int pageSize = 20)
+    {
+        var result = await _service.GetPagedAsync(page, pageSize);
+        return Ok(result);
+    }
 }

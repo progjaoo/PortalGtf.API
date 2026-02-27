@@ -10,10 +10,10 @@ public class PostCreateViewModel
     public string Imagem { get; set; } = null!;
     public string Slug { get; set; } = null!;
     public int EditorialId { get; set; }
+    public int? SubcategoriaId { get; set; }  
     public int EmissoraId { get; set; }
     public int CidadeId { get; set; }
     public int UsuarioCriacaoId { get; set; }
-    
     public List<string> Tags { get; set; } = new();
     public List<MidiaViewModel> Midias { get; set; } = new();
 }

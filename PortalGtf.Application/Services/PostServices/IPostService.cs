@@ -6,9 +6,13 @@ namespace PortalGtf.Application.Services.PostServices;
 public interface IPostService 
 {
     Task<List<PostListViewModel>> GetAllAsync();
+    Task<List<PostListViewModel>> GetAllByRecent();
+    Task<PagedResult<PostResumeViewModel>> GetPostsByRegiaoAsync(int regiaoId, int page, int pageSize);
     Task<PostDetailViewModel?> GetByIdAsync(int id);
     Task<List<PostListViewModel>> GetByEditorialAsync(int editorialId);
+    Task<List<PostListViewModel>> GetBySubcategoryAsync(int subcategoryId); 
     Task<List<PostListViewModel>> GetByUserAsync(string userName);
+    Task<List<PostListViewModel>> GetAllPostsByEmissora(int emissoraId);
     Task<List<PostListViewModel>> GetByStatusAsync(StatusPost status);
     Task<List<PostPublicViewModel>> GetAllPublishedAsync();
     Task<List<PostPublicViewModel>> SearchAsync(string query);
