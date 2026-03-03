@@ -21,8 +21,4 @@
       <ProjectReference Include="..\PortalGtf.Infrastructure\PortalGtf.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="wwwroot\" />
-    </ItemGroup>
-
 </Project>

@@ -14,5 +14,6 @@ public class PostPublicViewModel
     public int UsuarioCriacaoId { get; set; }
     public string UsuarioCriacao { get; set; }
     public string Emissora { get; set; } = null!;
+    
     public string Cidade { get; set; } = null!;
 }

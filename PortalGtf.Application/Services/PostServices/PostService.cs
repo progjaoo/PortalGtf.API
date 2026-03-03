@@ -1,3 +1,4 @@
+using System.Text;
 using PortalGtf.Application.ViewModels.PostsVM;
 using PortalGtf.Core.Entities;
 using PortalGtf.Core.Enums;
@@ -53,7 +54,9 @@ public class PostService : IPostService
             Cidade = p.Cidade?.Nome ?? "",
         };
     }
-    // TODO: Realizar todos métodos services de GET`s de POST`s
+
+    #region QUERIES PRINCIPAIS - CONSULTAS DO SISTEMA
+    // QUERIES PRINCIPAIS
     public async Task<PagedResult<PostResumeViewModel>> GetPostsByRegiaoAsync(int regiaoId, int page, int pageSize)
     {
         if (page <= 0) page = 1;
@@ -83,6 +86,51 @@ public class PostService : IPostService
         }).ToList();
 
         return new PagedResult<PostResumeViewModel>(result, totalCount, page, pageSize);
+    }
+    // TODO: SEO ENGINNER PARA PÁGINAS OTIMIZADAS DE PESQUISAS...
+    public async Task<PostDetailViewModel?> GetBySlugAsync(string slug)
+    {
+        var post = await _postRepository.GetBySlugAsync(slug);
+
+        if (post == null)
+            return null;
+
+        return new PostDetailViewModel
+        {
+            Id = post.Id,
+            Titulo = post.Titulo,
+            Subtitulo = post.Subtitulo,
+            Conteudo = post.Conteudo,
+            Slug = post.Slug,
+            Imagem = post.Imagem,
+            PublicadoEm = post.PublicadoEm,
+            Emissora = post.Emissora.NomeSocial,
+            Cidade = post.Cidade.Nome,
+            Editorial = post.Editorial.TipoPostagem
+        };
+    }
+    public async Task<string> GenerateSitemapAsync()
+    {
+        var posts = await _postRepository.GetAllPublishedForSitemapAsync();
+
+        var sb = new StringBuilder();
+
+        sb.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        sb.AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+
+        foreach (var post in posts)
+        {
+            sb.AppendLine("<url>");
+            sb.AppendLine($"<loc>https://portalgtf.com.br/noticia/{post.Slug}</loc>"); // TODO: Depois de publicado ajustar URL
+            sb.AppendLine($"<lastmod>{post.PublicadoEm:yyyy-MM-dd}</lastmod>");
+            sb.AppendLine("<changefreq>daily</changefreq>");
+            sb.AppendLine("<priority>0.8</priority>");
+            sb.AppendLine("</url>");
+        }
+
+        sb.AppendLine("</urlset>");
+
+        return sb.ToString();
     }
     public async Task<List<PostListViewModel>> GetAllAsync()
     {
@@ -159,8 +207,28 @@ public class PostService : IPostService
     {
         var posts = await _postRepository.SearchAsync(query);
         return posts.Select(MapToPublicVM).ToList();
-    }    
-    // TODO: Revisado
+    }
+    public async Task<List<PostPublicViewModel>> GetFilteredAsync(PostEnumViewModel filter)
+    {
+        var posts = await _postRepository
+            .GetFilteredAsync(filter.FiltroData, filter.OrdenarPor);
+
+        return posts.Select(p => new PostPublicViewModel
+        {
+            Id = p.Id,
+            Titulo = p.Titulo,
+            Subtitulo = p.Subtitulo,
+            Slug = p.Slug,
+            Imagem = p.Imagem,
+            PublicadoEm = p.PublicadoEm,
+            Emissora = p.Emissora.NomeSocial,
+            Cidade = p.Cidade.Nome
+        }).ToList();
+    }
+    #endregion
+        
+    #region COMMANDS - AÇÕES NO SISTEMA
+    // COMMANDS PRINCIPAIS
     public async Task EnviarParaRevisaoAsync(int postId)
     {
         var post = await _postRepository.GetByIdAsync(postId);
@@ -345,4 +413,5 @@ public class PostService : IPostService
         await _postRepository.DeleteAsync(post);
         await _postRepository.SaveChangesAsync();
     }
+    #endregion
 }

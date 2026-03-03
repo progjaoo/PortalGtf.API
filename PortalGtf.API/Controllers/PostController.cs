@@ -18,6 +18,32 @@ namespace PortalGtf.API.Controllers
             _service = service;
         }
         // TODO: realizar todos os GET`s do POST
+        [HttpGet("slug/{slug}")]
+        public async Task<IActionResult> GetBySlug(string slug)
+        {
+            var post = await _service.GetBySlugAsync(slug);
+
+            if (post == null)
+                return NotFound();
+
+            return Ok(post);
+        }
+        [HttpGet("/sitemap.xml")]
+        public async Task<IActionResult> Sitemap()
+        {
+            var xml = await _service.GenerateSitemapAsync();
+
+            return Content(xml, "application/xml");
+        }
+        [HttpGet("/robots.txt")]
+        public IActionResult Robots()
+        {
+            var robots = @"User-agent: *
+                Allow: /
+                Sitemap: https://portalgtf.com.br/sitemap.xml";
+
+            return Content(robots, "text/plain");
+        }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -95,6 +121,21 @@ namespace PortalGtf.API.Controllers
             var result = await _service.GetBySubcategoryAsync(subcategoryId);
             return Ok(result);
         }
+        [HttpGet("filtro")]
+        public async Task<IActionResult> GetFiltered(
+            [FromQuery] FiltroPostEnum dateFilter = FiltroPostEnum.QualquerData,
+            [FromQuery] OrdenaPostEnum orderBy = OrdenaPostEnum.MaisRecente)
+        {
+            var filter = new PostEnumViewModel()
+            {
+                FiltroData = dateFilter,
+                OrdenarPor = orderBy
+            };
+
+            var result = await _service.GetFilteredAsync(filter);
+
+            return Ok(result);
+        }
         /// <summary>
         /// Criar novo post
         /// </summary>
@@ -103,7 +144,7 @@ namespace PortalGtf.API.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+            
             await _service.CreateAsync(model);
 
             return Created("", new { message = "Post criado com sucesso" });

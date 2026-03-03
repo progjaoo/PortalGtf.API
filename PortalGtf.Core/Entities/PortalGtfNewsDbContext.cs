@@ -84,16 +84,17 @@ public class PortalGtfNewsDbContext : DbContext
         /* ============================
          * LOCALIZAÇÃO
          * ============================ */
-        modelBuilder.Entity<Cidade>()
-            .HasOne(c => c.Estado)
-            .WithMany(e => e.Cidades)
-            .HasForeignKey(c => c.EstadoId);
-
-        modelBuilder.Entity<Cidade>()
-            .HasOne(c => c.Regiao)
-            .WithMany(r => r.Cidades)
-            .HasForeignKey(c => c.RegiaoId)
+        modelBuilder.Entity<Estado>()
+            .HasOne(e => e.Regiao)
+            .WithMany(r => r.Estados)
+            .HasForeignKey(e => e.RegiaoId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // modelBuilder.Entity<Cidade>()
+        //     .HasOne(c => c.Estado)
+        //     .WithMany(e => e.Cidades)
+        //     .HasForeignKey(c => c.EstadoId)
+        //     .OnDelete(DeleteBehavior.Restrict);
 
         /* ============================
          * EMISSORA / REGIÃO (N:N)

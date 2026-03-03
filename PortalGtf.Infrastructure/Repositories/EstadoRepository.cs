@@ -24,6 +24,7 @@ public class EstadoRepository : IEstadoRepository
     {
         return await _dbContext.Estado
             .AsNoTracking()
+            .Include(c => c.Regiao)
             .SingleOrDefaultAsync(e => e.Id == id);
     }
 

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Bloquear área administrativa
+Disallow: /admin
+Disallow: /api
+
+# Sitemap
+Sitemap: https://portalgtf.com.br/sitemap.xml

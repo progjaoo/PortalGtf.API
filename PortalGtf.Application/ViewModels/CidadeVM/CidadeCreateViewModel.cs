@@ -8,5 +8,4 @@ public class CidadeCreateViewModel
     public string Nome { get; set; } = null!;
     [Required]
     public int EstadoId { get; set; }
-    public int? RegiaoId { get; set; }
 }

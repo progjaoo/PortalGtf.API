@@ -16,6 +16,10 @@ public interface IPostService
     Task<List<PostListViewModel>> GetByStatusAsync(StatusPost status);
     Task<List<PostPublicViewModel>> GetAllPublishedAsync();
     Task<List<PostPublicViewModel>> SearchAsync(string query);
+    Task<List<PostPublicViewModel>> GetFilteredAsync(PostEnumViewModel filter);
+    //TODO: PARTE DE SEO
+    Task<PostDetailViewModel?> GetBySlugAsync(string slug);
+    Task<string> GenerateSitemapAsync();
     Task EnviarParaRevisaoAsync(int postId);
     Task AprovarPostAsync(int postId);
     Task RejeitarPostAsync(int postId);

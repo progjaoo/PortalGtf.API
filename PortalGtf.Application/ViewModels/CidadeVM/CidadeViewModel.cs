@@ -8,6 +8,6 @@ public class CidadeViewModel
     public int EstadoId { get; set; }
     public string EstadoNome { get; set; } = null!;
 
-    public int? RegiaoId { get; set; }
-    public string? RegiaoNome { get; set; }
+    public int RegiaoId { get; set; }
+    public string RegiaoNome { get; set; } = null!;
 }

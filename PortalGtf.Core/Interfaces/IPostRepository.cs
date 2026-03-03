@@ -15,6 +15,10 @@ public interface IPostRepository
     Task<List<Post>> GetByUserAsync(string userName);
     Task<List<Post>> GetByStatusAsync(StatusPost status);
     Task<List<Post>> SearchAsync(string query);
+    Task<List<Post>> GetFilteredAsync(FiltroPostEnum filterData, OrdenaPostEnum ordenaPost);
+    //TODO: PARTE DE SEO
+    Task<Post?> GetBySlugAsync(string slug);
+    Task<List<Post>> GetAllPublishedForSitemapAsync(); // NÃO ESTÁ IMPLEMENTADO...
     Task AddAsync(Post post);
     Task UpdateAsync(Post post);
     Task DeleteAsync(Post post);

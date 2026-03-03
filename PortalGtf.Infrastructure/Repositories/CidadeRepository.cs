@@ -16,7 +16,7 @@ public class CidadeRepository : ICidadeRepository
     {
         return await _dbContext.Cidade.AsNoTracking()
             .Include(c => c.Estado)
-            .Include(c => c.Regiao)
+                .ThenInclude(e => e.Regiao)
             .ToListAsync();
     }
 
@@ -24,7 +24,7 @@ public class CidadeRepository : ICidadeRepository
     {
         return await _dbContext.Cidade.AsNoTracking()
             .Include(c => c.Estado)
-            .Include(c => c.Regiao)
+                .ThenInclude(e => e.Regiao)
             .SingleOrDefaultAsync(c => c.Id == id);
     }
     public async Task AddAsync(Cidade cidade)

@@ -118,6 +118,70 @@ public class PostRepository : IPostRepository
             .OrderByDescending(p => p.PublicadoEm)
             .ToListAsync();
     }
+    public async Task<List<Post>> GetFilteredAsync(FiltroPostEnum filterData, OrdenaPostEnum ordenaPost)
+    {
+        var query = _dbContext.Post
+            .AsNoTracking()
+            .Include(p => p.Editorial)
+            .ThenInclude(e => e.TemaEditorial)
+            .Include(p => p.Emissora)
+            .Include(p => p.UsuarioCriacao)
+            .Include(p => p.Cidade)
+            .Where(p => p.StatusPost == StatusPost.Publicado);
+
+        // FILTRO DE DATA
+        if (filterData != FiltroPostEnum.QualquerData)
+        {
+            var now = DateTime.UtcNow;
+
+            DateTime startDate = filterData switch
+            {
+                FiltroPostEnum.UltimaHora => now.AddHours(-1),
+                FiltroPostEnum.UltimaSemana => now.AddDays(-7),
+                FiltroPostEnum.UltimoMes => now.AddMonths(-1),
+                FiltroPostEnum.UltimaAno => now.AddYears(-1),
+                _ => DateTime.MinValue
+            };
+
+            query = query.Where(p => p.PublicadoEm >= startDate);
+        }
+
+        // ORDENAÇÃO
+        query = ordenaPost switch
+        {
+            OrdenaPostEnum.MaisAntigos => query.OrderBy(p => p.PublicadoEm),
+            _ => query.OrderByDescending(p => p.PublicadoEm)
+        };
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<Post?> GetBySlugAsync(string slug)
+    {
+        return await _dbContext.Post
+            .AsNoTracking()
+            .Include(p => p.Editorial)
+            .ThenInclude(e => e.TemaEditorial)
+            .Include(p => p.Emissora)
+            .Include(p => p.UsuarioCriacao)
+            .Include(p => p.Cidade)
+            .FirstOrDefaultAsync(p =>
+                p.Slug == slug &&
+                p.StatusPost == StatusPost.Publicado);
+    }
+    public async Task<List<Post>> GetAllPublishedForSitemapAsync()
+    {
+        return await _dbContext.Post
+            .AsNoTracking()
+            .Where(p => p.StatusPost == StatusPost.Publicado)
+            .OrderByDescending(p => p.PublicadoEm)
+            .Select(p => new Post
+            {
+                Slug = p.Slug,
+                PublicadoEm = p.PublicadoEm
+            })
+            .ToListAsync();
+    }
     public async Task AddAsync(Post post)
     {
         await _dbContext.Post.AddAsync(post);

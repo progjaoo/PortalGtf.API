@@ -22,7 +22,7 @@ public class RegiaoRepository : IRegiaoRepository
     public async Task<Regiao?> GetByIdAsync(int id)
     {
         return await _dbContext.Regiao
-            .Include(r => r.Cidades)
+            .Include(r => r.Estados)
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 

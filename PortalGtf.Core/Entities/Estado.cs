@@ -5,5 +5,9 @@ public class Estado
     public int Id { get; set; }
     public string Nome { get; set; } = null!;
     public string Sigla { get; set; } = null!;
+
+    public int RegiaoId { get; set; }
+    public Regiao Regiao { get; set; } = null!;
+
     public ICollection<Cidade> Cidades { get; set; } = new List<Cidade>();
 }

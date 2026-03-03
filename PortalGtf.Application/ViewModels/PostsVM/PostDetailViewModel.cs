@@ -13,6 +13,7 @@ public class PostDetailViewModel
     public DateTime? PublicadoEm { get; set; }
     public DateTime? DataCriacao { get; set; }
     public StatusPost Status { get; set; }
+    public string Slug { get; set; }
     public int UsuarioCriacaoId { get; set; }
     public string UsuarioCriacao { get; set; }
     public string Editorial { get; set; } = null!;

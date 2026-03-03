@@ -12,6 +12,7 @@ public class CidadeService : ICidadeService
     {
         _cidadeRepository = cidadeRepository;
     }
+    
     public async Task<List<CidadeViewModel>> GetAllAsync()
     {
         var cidades = await _cidadeRepository.GetAllAsync();
@@ -20,10 +21,12 @@ public class CidadeService : ICidadeService
         {
             Id = c.Id,
             Nome = c.Nome,
+
             EstadoId = c.EstadoId,
             EstadoNome = c.Estado.Nome,
-            RegiaoId = c.RegiaoId,
-            RegiaoNome = c.Regiao?.Nome
+
+            RegiaoId = c.Estado.RegiaoId,
+            RegiaoNome = c.Estado.Regiao.Nome
         }).ToList();
     }
     public async Task<CidadeViewModel?> GetByIdAsync(int id)
@@ -36,22 +39,21 @@ public class CidadeService : ICidadeService
         {
             Id = cidade.Id,
             Nome = cidade.Nome,
+
             EstadoId = cidade.EstadoId,
             EstadoNome = cidade.Estado.Nome,
-            RegiaoId = cidade.RegiaoId,
-            RegiaoNome = cidade.Regiao?.Nome
+
+            RegiaoId = cidade.Estado.RegiaoId,
+            RegiaoNome = cidade.Estado.Regiao.Nome
         };
     }
-
     public async Task<int> CreateAsync(CidadeCreateViewModel model)
     {
         var cidade = new Cidade
         {
             Nome = model.Nome,
-            EstadoId = model.EstadoId,
-            RegiaoId = model.RegiaoId
+            EstadoId = model.EstadoId
         };
-
         await _cidadeRepository.AddAsync(cidade);
         return cidade.Id;
     }
@@ -64,7 +66,6 @@ public class CidadeService : ICidadeService
 
         cidade.Nome = model.Nome;
         cidade.EstadoId = model.EstadoId;
-        cidade.RegiaoId = model.RegiaoId;
 
         await _cidadeRepository.UpdateAsync(cidade);
         return true;
