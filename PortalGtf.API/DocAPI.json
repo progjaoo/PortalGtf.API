@@ -1155,6 +1155,52 @@
         }
       }
     },
+    "/api/posts/slug/{slug}": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/sitemap.xml": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/robots.txt": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/posts": {
       "get": {
         "tags": [
@@ -1385,6 +1431,34 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/posts/filtro": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "dateFilter",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FiltroPostEnum"
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OrdenaPostEnum"
             }
           }
         ],
@@ -2304,14 +2378,6 @@
           "estado": {
             "$ref": "#/components/schemas/Estado"
           },
-          "regiaoId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "regiao": {
-            "$ref": "#/components/schemas/Regiao"
-          },
           "posts": {
             "type": "array",
             "items": {
@@ -2336,11 +2402,6 @@
           "estadoId": {
             "type": "integer",
             "format": "int32"
-          },
-          "regiaoId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2730,6 +2791,13 @@
             "type": "string",
             "nullable": true
           },
+          "regiaoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regiao": {
+            "$ref": "#/components/schemas/Regiao"
+          },
           "cidades": {
             "type": "array",
             "items": {
@@ -2753,6 +2821,17 @@
           }
         },
         "additionalProperties": false
+      },
+      "FiltroPostEnum": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "Funcao": {
         "type": "object",
@@ -2921,6 +3000,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "OrdenaPostEnum": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "Permissao": {
         "type": "object",
@@ -3321,10 +3408,10 @@
             "type": "string",
             "nullable": true
           },
-          "cidades": {
+          "estados": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Cidade"
+              "$ref": "#/components/schemas/Estado"
             },
             "nullable": true
           },
