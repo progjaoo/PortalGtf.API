@@ -94,6 +94,27 @@ namespace PortalGtf.API.Controllers
             var result = await _service.GetAllPublishedAsync();
             return Ok(result);
         }
+        [HttpGet("destaques")]
+        public async Task<IActionResult> GetDestaques()
+        {
+            var posts = await _service.GetDestaquesAsync();
+
+            return Ok(posts);
+        }
+        [HttpGet("destaques88fm")]
+        public async Task<IActionResult> GetDestaquesOitentaOitofm()
+        {
+            var posts = await _service.GetDestaquesbBy88FmAsync();
+
+            return Ok(posts);
+        }
+        [HttpGet("destaquesFatoPopular")]
+        public async Task<IActionResult> GetDestaquesFatoPopular()
+        {
+            var posts = await _service.GetDestaquesbByFatoPopularAsync();
+
+            return Ok(posts);
+        }
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string query)
         {
@@ -135,6 +156,13 @@ namespace PortalGtf.API.Controllers
             var result = await _service.GetFilteredAsync(filter);
 
             return Ok(result);
+        }
+        [HttpPut("{id}/destaque")]
+        public async Task<IActionResult> SetDestaque(int id, [FromQuery] bool destaque)
+        {
+            await _service.SetDestaqueAsync(id, destaque);
+
+            return NoContent();
         }
         /// <summary>
         /// Criar novo post

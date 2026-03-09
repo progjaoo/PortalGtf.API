@@ -18,6 +18,7 @@ public class UsuarioRepository : IUsuarioRepository
     {
         return await _context.Usuario
             .AsNoTracking()
+            .Include(u => u.Funcao)
             .ToListAsync();
     }
 

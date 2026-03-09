@@ -155,7 +155,65 @@ public class PostRepository : IPostRepository
 
         return await query.ToListAsync();
     }
+    public async Task<List<Post>> GetDestaquesAsync()
+    {
+        return await _dbContext.Post
+            .AsNoTracking()
+            .Where(p => p.Destaque && p.StatusPost == StatusPost.Publicado)
+            .Include(p => p.Editorial)
+            .Include(p => p.Emissora)
+            .Include(p => p.Cidade)
+            .Include(p => p.UsuarioCriacao)
+            .OrderByDescending(p => p.PublicadoEm)
+            .Take(20)
+            .ToListAsync();
+    }
+    // Destaques da Rádio 88FM
+    public async Task<List<Post>> GetDestaquesBy88FmAsync()
+    {
+        return await _dbContext.Post
+            .AsNoTracking()
+            .Where(p => p.Destaque 
+                        && p.StatusPost == StatusPost.Publicado 
+                        && p.Emissora.NomeSocial == "Radio 88 FM") // Filtro por nome
+            .Include(p => p.Editorial)
+            .Include(p => p.Emissora)
+            .Include(p => p.Cidade)
+            .Include(p => p.UsuarioCriacao)
+            .OrderByDescending(p => p.PublicadoEm)
+            .Take(20)
+            .ToListAsync();
+    }
 
+// Destaques do Fato Popular
+    public async Task<List<Post>> GetDestaquesByFatoPopularAsync()
+    {
+        return await _dbContext.Post
+            .AsNoTracking()
+            .Where(p => p.Destaque 
+                        && p.StatusPost == StatusPost.Publicado 
+                        && p.Emissora.NomeSocial == "Fato Popular")
+            .Include(p => p.Editorial)
+            .Include(p => p.Emissora)
+            .Include(p => p.Cidade)
+            .Include(p => p.UsuarioCriacao)
+            .OrderByDescending(p => p.PublicadoEm)
+            .Take(20)
+            .ToListAsync();
+    }
+    public async Task SetDestaqueAsync(int postId, bool destaque)
+    {
+        var post = await _dbContext.Post.SingleOrDefaultAsync(p => p.Id == postId);
+
+        if (post == null)
+            throw new Exception("Post não encontrado");
+
+        post.Destaque = destaque;
+        _dbContext.Post.Update(post);
+
+        await _dbContext.SaveChangesAsync();
+    }
+    //todo: parte de SEO
     public async Task<Post?> GetBySlugAsync(string slug)
     {
         return await _dbContext.Post

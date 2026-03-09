@@ -225,6 +225,66 @@ public class PostService : IPostService
             Cidade = p.Cidade.Nome
         }).ToList();
     }
+    public async Task<List<PostListViewModel>> GetDestaquesAsync()
+    {
+        var post = await _postRepository.GetDestaquesAsync();
+
+        return post.Select(p => new PostListViewModel()
+        {
+            Id = p.Id,
+            Titulo = p.Titulo,
+            Conteudo = p.Conteudo,
+            Editorial = p.Editorial?.TipoPostagem,
+            Imagem = p.Imagem,
+            Emissora = p.Emissora?.NomeSocial,
+            Status = p.StatusPost.ToString(),
+            DataCriacao = p.DataCriacao,
+            PublicadoEm = p.PublicadoEm,
+            UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
+            UsuarioCriacaoId = p.UsuarioCriacaoId,
+            Cidade = p.Cidade?.Nome ?? ""
+        }).ToList();
+    }
+    public async Task<List<PostListViewModel>> GetDestaquesbBy88FmAsync()
+    {
+        var post = await _postRepository.GetDestaquesBy88FmAsync();
+
+        return post.Select(p => new PostListViewModel()
+        {
+            Id = p.Id,
+            Titulo = p.Titulo,
+            Conteudo = p.Conteudo,
+            Editorial = p.Editorial?.TipoPostagem,
+            Imagem = p.Imagem,
+            Emissora = p.Emissora?.NomeSocial,
+            Status = p.StatusPost.ToString(),
+            DataCriacao = p.DataCriacao,
+            PublicadoEm = p.PublicadoEm,
+            UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
+            UsuarioCriacaoId = p.UsuarioCriacaoId,
+            Cidade = p.Cidade?.Nome ?? ""
+        }).ToList();
+    }
+    public async Task<List<PostListViewModel>> GetDestaquesbByFatoPopularAsync()
+    {
+        var post = await _postRepository.GetDestaquesByFatoPopularAsync();
+
+        return post.Select(p => new PostListViewModel()
+        {
+            Id = p.Id,
+            Titulo = p.Titulo,
+            Conteudo = p.Conteudo,
+            Editorial = p.Editorial?.TipoPostagem,
+            Imagem = p.Imagem,
+            Emissora = p.Emissora?.NomeSocial,
+            Status = p.StatusPost.ToString(),
+            DataCriacao = p.DataCriacao,
+            PublicadoEm = p.PublicadoEm,
+            UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
+            UsuarioCriacaoId = p.UsuarioCriacaoId,
+            Cidade = p.Cidade?.Nome ?? ""
+        }).ToList();
+    }
     #endregion
         
     #region COMMANDS - AÇÕES NO SISTEMA
@@ -313,6 +373,11 @@ public class PostService : IPostService
         await _postRepository.SaveChangesAsync();
 
         return url;
+    }
+    
+    public async Task SetDestaqueAsync(int postId, bool destaque)
+    {
+        await _postRepository.SetDestaqueAsync(postId, destaque);
     }
     public async Task CreateAsync(PostCreateViewModel model)
     {

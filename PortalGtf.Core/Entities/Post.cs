@@ -27,6 +27,7 @@ public class Post
     public DateTime? DataAprovacao { get; set; }
     public DateTime? DataEdicao { get; set; }
     public DateTime? PublicadoEm { get; set; }
+    public bool Destaque { get; set; } // TODO: Destaque de Notícia...
     public ICollection<PostImagem> Imagens { get; set; } = new List<PostImagem>();
     public ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
     public ICollection<PostVisualizacao> Visualizacoes { get; set; } = new List<PostVisualizacao>();

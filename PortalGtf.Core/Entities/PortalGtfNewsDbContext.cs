@@ -32,7 +32,7 @@ public class PortalGtfNewsDbContext : DbContext
     public DbSet<Usuario> Usuario => Set<Usuario>();
     public DbSet<UsuarioEmissora> UsuarioEmissora => Set<UsuarioEmissora>();
     public DbSet<Midia> Midia => Set<Midia>();
-    
+    public DbSet<ProgramacaoRadio> ProgramacaoRadio => Set<ProgramacaoRadio>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

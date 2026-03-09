@@ -11,10 +11,12 @@ using PortalGtf.Application.Services.EditorialServices;
 using PortalGtf.Application.Services.EmissoraRegiaoServices;
 using PortalGtf.Application.Services.EmissoraServices;
 using PortalGtf.Application.Services.EstadoServices;
+using PortalGtf.Application.Services.FuncaoPermissaoService;
 using PortalGtf.Application.Services.FuncaoServices;
 using PortalGtf.Application.Services.MidiaServices;
 using PortalGtf.Application.Services.PermissaoServices;
 using PortalGtf.Application.Services.PostServices;
+using PortalGtf.Application.Services.ProgramacaoRadioServices;
 using PortalGtf.Application.Services.RegiaoServices;
 using PortalGtf.Application.Services.StreamingServices;
 using PortalGtf.Application.Services.SubcategoryServices;
@@ -47,12 +49,6 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-builder.Services.AddScoped<IFuncaoRepository, FuncaoRepository>();
-builder.Services.AddScoped<IFuncaoService, FuncaoService>();
-
-builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
-builder.Services.AddScoped<IPermissaoService, PermissaoService>();
-
 builder.Services.AddScoped<IEmissoraRepository, EmissoraRepository>();
 builder.Services.AddScoped<IEmissoraService, EmissoraService>();
 
@@ -65,8 +61,14 @@ builder.Services.AddScoped<IEstadoService, EstadoService>();
 builder.Services.AddScoped<ICidadeService, CidadeService>();
 builder.Services.AddScoped<ICidadeRepository, CidadeRepository>();
 
-builder.Services.AddScoped<IFuncaoPermissaoRepository, FuncaoPermissaoRepository>();
+builder.Services.AddScoped<IFuncaoRepository, FuncaoRepository>();
 builder.Services.AddScoped<IFuncaoService, FuncaoService>();
+
+builder.Services.AddScoped<IFuncaoPermissaoService, FuncaoPermissaoService>();
+builder.Services.AddScoped<IFuncaoPermissaoRepository, FuncaoPermissaoRepository>();
+
+builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
+builder.Services.AddScoped<IPermissaoService, PermissaoService>();
 
 builder.Services.AddScoped<IEmissoraRegiaoRepository, EmissoraRegiaoRepository>();
 builder.Services.AddScoped<IEmissoraRegiaoService, EmissoraRegiaoService>();
@@ -87,6 +89,10 @@ builder.Services.AddScoped<ISubcategoriaRepository, SubcategoriaRepository>();
 
 builder.Services.AddScoped<IMidiaRepository, MidiaRepository>();
 builder.Services.AddScoped<IMidiaService, MidiaService>();
+
+builder.Services.AddScoped<IProgramacaoRadiorRepository, ProgramacaoRadiorRepository>();
+builder.Services.AddScoped<IProgramacaoRadioService, ProgramacaoRadioService>();
+
 #endregion 
 
 builder.Services.AddCors(options =>

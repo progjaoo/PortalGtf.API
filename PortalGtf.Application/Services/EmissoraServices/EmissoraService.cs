@@ -66,6 +66,9 @@ public class EmissoraService : IEmissoraService
             Numero = model.Numero,
             Bairro = model.Bairro,
             Estado = model.Estado,
+            Logo = model.Logo,
+            LogoSmall = model.LogoSmall,
+            TemaPrincipal = model.TemaPrincipal,
             Cidade = model.Cidade,
             Slug = model.Slug,
             Ativa = model.Ativa

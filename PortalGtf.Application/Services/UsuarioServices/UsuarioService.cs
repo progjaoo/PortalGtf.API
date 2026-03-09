@@ -29,7 +29,8 @@ public class UsuarioService : IUsuarioService
             Id = u.Id,
             Email = u.Email,
             NomeCompleto = u.NomeCompleto,
-            StatusUsuario = u.StatusUsuario
+            StatusUsuario = u.StatusUsuario,
+            NomeFuncao = u.Funcao.TipoFuncao    
         });
     }
     

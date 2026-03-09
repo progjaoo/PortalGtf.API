@@ -17,6 +17,10 @@ public interface IPostService
     Task<List<PostPublicViewModel>> GetAllPublishedAsync();
     Task<List<PostPublicViewModel>> SearchAsync(string query);
     Task<List<PostPublicViewModel>> GetFilteredAsync(PostEnumViewModel filter);
+    Task<List<PostListViewModel>> GetDestaquesAsync();
+    Task<List<PostListViewModel>> GetDestaquesbByFatoPopularAsync();
+    Task<List<PostListViewModel>> GetDestaquesbBy88FmAsync();
+    Task SetDestaqueAsync(int postId, bool destaque);
     //TODO: PARTE DE SEO
     Task<PostDetailViewModel?> GetBySlugAsync(string slug);
     Task<string> GenerateSitemapAsync();
