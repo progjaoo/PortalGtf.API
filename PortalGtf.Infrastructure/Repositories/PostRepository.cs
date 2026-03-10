@@ -185,7 +185,7 @@ public class PostRepository : IPostRepository
             .ToListAsync();
     }
 
-// Destaques do Fato Popular
+    // Destaques do Fato Popular
     public async Task<List<Post>> GetDestaquesByFatoPopularAsync()
     {
         return await _dbContext.Post
