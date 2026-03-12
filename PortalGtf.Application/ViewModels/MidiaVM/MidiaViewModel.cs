@@ -9,5 +9,5 @@ public class MidiaViewModel
     public int Ordem { get; set; }
     public TipoMidia Tipo { get; set; }
     public int MidiaId { get; set; }
-    public Midia Midia { get; set; }
+   
 }

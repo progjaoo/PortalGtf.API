@@ -25,6 +25,7 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.UsuarioCriacao)
             .Include(p => p.Cidade)
+            .Include(p => p.Imagens)
             .OrderByDescending(p => p.DataCriacao);
     }
     public async Task<List<Post>> GetAllAsync()

@@ -9,6 +9,7 @@ namespace PortalGtf.Application.Services.PostServices;
 public class PostService : IPostService
 {
     private readonly IPostRepository _postRepository;
+    private readonly IMidiaRepository _midiaRepository;
     private readonly ITagRepository _tagRepository;
     private readonly ISubcategoriaRepository _subcategoriaRepository;
     public PostService(IPostRepository postRepository,ITagRepository tagRepository,  ISubcategoriaRepository subcategoriaRepository)
@@ -454,16 +455,84 @@ public class PostService : IPostService
         var post = await _postRepository.GetByIdAsync(id);
 
         if (post == null)
-            throw new Exception("Post não encontrado");
+            throw new Exception("Post não encontrado.");
+
+        if (model.SubcategoriaId.HasValue)
+        {
+            var subcategoria = await _subcategoriaRepository
+                .GetByIdAsync(model.SubcategoriaId.Value);
+
+            if (subcategoria == null)
+                throw new Exception("Subcategoria não encontrada.");
+
+            if (subcategoria.EditorialId != model.EditorialId)
+                throw new Exception("Subcategoria não pertence ao Editorial informado.");
+        }
 
         post.Titulo = model.Titulo;
         post.Subtitulo = model.Subtitulo;
         post.Conteudo = model.Conteudo;
         post.Imagem = model.Imagem;
+        post.Slug = model.Slug;
         post.EditorialId = model.EditorialId;
         post.SubcategoriaId = model.SubcategoriaId;
+        post.EmissoraId = model.EmissoraId;
+        post.CidadeId = model.CidadeId;
         post.StatusPost = model.StatusPost;
         post.DataEdicao = DateTime.UtcNow;
+
+        // -------- TAGS --------
+
+        post.PostTags.Clear();
+
+        foreach (var tagNome in model.Tags)
+        {
+            var slug = tagNome.ToLower().Replace(" ", "-");
+
+            var existingTag = await _tagRepository.GetBySlugAsync(slug);
+
+            Tag tag;
+
+            if (existingTag == null)
+            {
+                tag = new Tag
+                {
+                    Nome = tagNome,
+                    Slug = slug
+                };
+
+                await _tagRepository.AddAsync(tag);
+            }
+            else
+            {
+                tag = existingTag;
+            }
+
+            post.PostTags.Add(new PostTag
+            {
+                TagId = tag.Id
+            });
+        }
+
+        // -------- MIDIAS --------
+
+        post.Imagens.Clear();
+
+        foreach (var midia in model.Midias)
+        {
+            var midiaEntity = await _midiaRepository.GetByIdAsync(midia.MidiaId);
+
+            if (midiaEntity == null)
+                throw new Exception("Midia não encontrada");
+
+            post.Imagens.Add(new PostImagem
+            {
+                MidiaId = midia.MidiaId,
+                UrlPost = midiaEntity.Url,
+                Ordem = midia.Ordem,
+                Tipo = midia.Tipo
+            });
+        }
 
         await _postRepository.UpdateAsync(post);
         await _postRepository.SaveChangesAsync();

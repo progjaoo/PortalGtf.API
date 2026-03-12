@@ -1,3 +1,4 @@
+using PortalGtf.Application.ViewModels.MidiaVM;
 using PortalGtf.Core.Enums;
 
 namespace PortalGtf.Application.ViewModels.PostsVM;
@@ -8,7 +9,16 @@ public class PostUpdateViewModel
     public string Subtitulo { get; set; } = null!;
     public string Conteudo { get; set; } = null!;
     public string Imagem { get; set; } = null!;
+    public string Slug { get; set; } = null!;
+
     public int EditorialId { get; set; }
-    public int SubcategoriaId { get; set; }
+    public int? SubcategoriaId { get; set; }
+
+    public int EmissoraId { get; set; }
+    public int CidadeId { get; set; }
+
     public StatusPost StatusPost { get; set; }
+
+    public List<string> Tags { get; set; } = new();
+    public List<MidiaViewModel> Midias { get; set; } = new();
 }
