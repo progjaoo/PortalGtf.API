@@ -22,6 +22,7 @@ public class SubcategoriaService : ISubcategoriaService
 
         return subcategorias.Select(s => new SubcategoriaViewModel
         {
+            Id = s.Id,
             Nome = s.Nome,
             Slug = s.Slug,
             EditorialId = s.EditorialId

@@ -12,10 +12,11 @@ public class PostService : IPostService
     private readonly IMidiaRepository _midiaRepository;
     private readonly ITagRepository _tagRepository;
     private readonly ISubcategoriaRepository _subcategoriaRepository;
-    public PostService(IPostRepository postRepository,ITagRepository tagRepository,  ISubcategoriaRepository subcategoriaRepository)
+    public PostService(IPostRepository postRepository,ITagRepository tagRepository, IMidiaRepository midiaRepository,ISubcategoriaRepository subcategoriaRepository)
     {
         _postRepository = postRepository;
         _tagRepository = tagRepository;
+        _midiaRepository = midiaRepository;
         _subcategoriaRepository = subcategoriaRepository;
     }
     private static PostListViewModel MapToListVM(Post p)
@@ -26,14 +27,23 @@ public class PostService : IPostService
             Titulo = p.Titulo,
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
-            Imagem = p.Imagem,
             Emissora = p.Emissora?.NomeSocial,
+            ImagemCapaId = p.ImagemCapaId,
+            ImagemCapaUrl = p.ImagemCapa?.Url,
             Status = p.StatusPost.ToString(),
+            StatusPost = (int)p.StatusPost,
             DataCriacao = p.DataCriacao,
             PublicadoEm = p.PublicadoEm,
             UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = p.UsuarioCriacaoId,
-            Cidade = p.Cidade?.Nome ?? ""
+            Cidade = p.Cidade?.Nome ?? "",
+            Midias = p.Imagens?.Select(i => new PostImagemViewModel
+            {
+                MidiaId = i.MidiaId,
+                Url = i.Midia?.Url ?? "", 
+                Ordem = i.Ordem,
+                Tipo = i.Tipo.ToString()
+            }).ToList() ?? new List<PostImagemViewModel>()
         };
     }
     private static PostPublicViewModel MapToPublicVM(Post p)
@@ -44,8 +54,9 @@ public class PostService : IPostService
             Titulo = p.Titulo,
             Conteudo = p.Conteudo,
             Subtitulo = p.Subtitulo,
+            ImagemCapaId = p.ImagemCapaId,
+            ImagemCapaUrl = p.ImagemCapa?.Url,
             Slug = p.Slug,
-            Imagem = p.Imagem,
             PublicadoEm = p.PublicadoEm,
             Editorial = p.Editorial?.TipoPostagem,
             CorTema = p.Editorial?.TemaEditorial?.CorPrimaria,
@@ -53,6 +64,13 @@ public class PostService : IPostService
             UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = p.UsuarioCriacaoId,
             Cidade = p.Cidade?.Nome ?? "",
+            Midias = p.Imagens?.Select(i => new PostImagemViewModel
+            {
+                MidiaId = i.MidiaId,
+                Url = i.Midia?.Url ?? "", 
+                Ordem = i.Ordem,
+                Tipo = i.Tipo.ToString()
+            }).ToList() ?? new List<PostImagemViewModel>()
         };
     }
 
@@ -71,9 +89,9 @@ public class PostService : IPostService
             Titulo = p.Titulo,
             Subtitulo = p.Subtitulo,
             Slug = p.Slug,
-            Imagem = p.Imagem,
             PublicadoEm = p.PublicadoEm,
-        
+            ImagemCapaId = p.ImagemCapaId,
+            ImagemCapaUrl = p.ImagemCapa?.Url,
             Editorial = p.Editorial?.TipoPostagem, 
             CorTema = p.Editorial?.TemaEditorial?.CorPrimaria, 
             UsuarioCriacaoId = p.UsuarioCriacaoId,
@@ -83,12 +101,22 @@ public class PostService : IPostService
         
             EmissoraNome = p.Emissora?.NomeSocial,
             EmissoraSlug = p.Emissora?.Slug,
-            EmissoraLogo = p.Emissora?.LogoSmall
+            EmissoraLogo = p.Emissora?.LogoSmall,
+            
+            Midias = p.Imagens?.Select(i => new PostImagemViewModel
+            {
+                MidiaId = i.MidiaId,
+                Url = i.Midia?.Url ?? "", 
+                Ordem = i.Ordem,
+                Tipo = i.Tipo.ToString()
+            }).ToList() ?? new List<PostImagemViewModel>()
+            
         }).ToList();
 
         return new PagedResult<PostResumeViewModel>(result, totalCount, page, pageSize);
     }
     // TODO: SEO ENGINNER PARA PÁGINAS OTIMIZADAS DE PESQUISAS...
+
     public async Task<PostDetailViewModel?> GetBySlugAsync(string slug)
     {
         var post = await _postRepository.GetBySlugAsync(slug);
@@ -103,11 +131,19 @@ public class PostService : IPostService
             Subtitulo = post.Subtitulo,
             Conteudo = post.Conteudo,
             Slug = post.Slug,
-            Imagem = post.Imagem,
+            ImagemCapaId = post.ImagemCapaId,
+            ImagemCapaUrl = post.ImagemCapa?.Url,
             PublicadoEm = post.PublicadoEm,
             Emissora = post.Emissora.NomeSocial,
             Cidade = post.Cidade.Nome,
-            Editorial = post.Editorial.TipoPostagem
+            Editorial = post.Editorial.TipoPostagem,
+            Midias = post.Imagens?.Select(i => new PostImagemViewModel
+            {
+                MidiaId = i.MidiaId,
+                Url = i.Midia?.Url ?? "", 
+                Ordem = i.Ordem,
+                Tipo = i.Tipo.ToString()
+            }).ToList() ?? new List<PostImagemViewModel>()
         };
     }
     public async Task<string> GenerateSitemapAsync()
@@ -138,6 +174,16 @@ public class PostService : IPostService
         var posts = await _postRepository.GetAllAsync();
         return posts.Select(MapToListVM).ToList();
     }
+    public async Task<List<PostListViewModel>> GetAllPostsByStatusRascunho()
+    {
+        var posts = await _postRepository.GetAllPostsByStatusRascunho();
+        return posts.Select(MapToListVM).ToList();
+    }
+    public async Task<List<PostListViewModel>> GetAllPostsByStatusRevisao()
+    {
+        var posts = await _postRepository.GetAllPostsByStatusRevisao();
+        return posts.Select(MapToListVM).ToList();
+    }
     public async Task<List<PostListViewModel>> GetAllByRecent()
     {
         var post = await _postRepository.GetAllByRecent();
@@ -155,8 +201,9 @@ public class PostService : IPostService
             Titulo = post.Titulo,
             Subtitulo = post.Subtitulo,
             Conteudo = post.Conteudo,
-            Imagem = post.Imagem,
             Status = post.StatusPost,
+            ImagemCapaId = post.ImagemCapaId,
+            ImagemCapaUrl = post.ImagemCapa?.Url,
             Editorial = post.Editorial?.TipoPostagem,
             Emissora = post.Emissora?.NomeSocial,
             Subcategoria =  post.Subcategoria?.Nome,
@@ -165,6 +212,15 @@ public class PostService : IPostService
             Cidade = post.Cidade?.Nome ?? "",
             DataCriacao = post.DataCriacao,
             PublicadoEm = post.PublicadoEm,
+            
+            Midias = post.Imagens?.Select(i => new PostImagemViewModel
+            {
+                MidiaId = i.MidiaId,
+                Url = i.Midia?.Url ?? "", 
+                Ordem = i.Ordem,
+                Tipo = i.Tipo.ToString()
+            }).ToList() ?? new List<PostImagemViewModel>(),
+            
             Tags = post.PostTags.Select(pt => pt.Tag.Nome).ToList()
         };
     }
@@ -220,7 +276,6 @@ public class PostService : IPostService
             Titulo = p.Titulo,
             Subtitulo = p.Subtitulo,
             Slug = p.Slug,
-            Imagem = p.Imagem,
             PublicadoEm = p.PublicadoEm,
             Emissora = p.Emissora.NomeSocial,
             Cidade = p.Cidade.Nome
@@ -236,14 +291,22 @@ public class PostService : IPostService
             Titulo = p.Titulo,
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
-            Imagem = p.Imagem,
             Emissora = p.Emissora?.NomeSocial,
             Status = p.StatusPost.ToString(),
             DataCriacao = p.DataCriacao,
             PublicadoEm = p.PublicadoEm,
             UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = p.UsuarioCriacaoId,
-            Cidade = p.Cidade?.Nome ?? ""
+            Cidade = p.Cidade?.Nome ?? "",
+            ImagemCapaId = p.ImagemCapaId,
+            ImagemCapaUrl = p.ImagemCapa?.Url,
+            Midias = p.Imagens?.Select(i => new PostImagemViewModel
+            {
+                MidiaId = i.MidiaId,
+                Url = i.Midia?.Url ?? "", 
+                Ordem = i.Ordem,
+                Tipo = i.Tipo.ToString()
+            }).ToList() ?? new List<PostImagemViewModel>()
         }).ToList();
     }
     public async Task<List<PostListViewModel>> GetDestaquesbBy88FmAsync()
@@ -256,14 +319,22 @@ public class PostService : IPostService
             Titulo = p.Titulo,
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
-            Imagem = p.Imagem,
             Emissora = p.Emissora?.NomeSocial,
             Status = p.StatusPost.ToString(),
             DataCriacao = p.DataCriacao,
             PublicadoEm = p.PublicadoEm,
             UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = p.UsuarioCriacaoId,
-            Cidade = p.Cidade?.Nome ?? ""
+            Cidade = p.Cidade?.Nome ?? "",
+            ImagemCapaId = p.ImagemCapaId,
+            ImagemCapaUrl = p.ImagemCapa?.Url,
+            Midias = p.Imagens?.Select(i => new PostImagemViewModel
+            {
+                MidiaId = i.MidiaId,
+                Url = i.Midia?.Url ?? "", 
+                Ordem = i.Ordem,
+                Tipo = i.Tipo.ToString()
+            }).ToList() ?? new List<PostImagemViewModel>()
         }).ToList();
     }
     public async Task<List<PostListViewModel>> GetDestaquesbByFatoPopularAsync()
@@ -276,29 +347,35 @@ public class PostService : IPostService
             Titulo = p.Titulo,
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
-            Imagem = p.Imagem,
             Emissora = p.Emissora?.NomeSocial,
             Status = p.StatusPost.ToString(),
             DataCriacao = p.DataCriacao,
             PublicadoEm = p.PublicadoEm,
             UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = p.UsuarioCriacaoId,
-            Cidade = p.Cidade?.Nome ?? ""
+            Cidade = p.Cidade?.Nome ?? "",
+            ImagemCapaId = p.ImagemCapaId,
+            ImagemCapaUrl = p.ImagemCapa?.Url,
+            Midias = p.Imagens?.Select(i => new PostImagemViewModel
+            {
+                MidiaId = i.MidiaId,
+                Url = i.Midia?.Url ?? "", 
+                Ordem = i.Ordem,
+                Tipo = i.Tipo.ToString()
+            }).ToList() ?? new List<PostImagemViewModel>()
         }).ToList();
     }
     #endregion
         
     #region COMMANDS - AÇÕES NO SISTEMA
     // COMMANDS PRINCIPAIS
+    
     public async Task EnviarParaRevisaoAsync(int postId)
     {
         var post = await _postRepository.GetByIdAsync(postId);
 
         if (post == null)
             throw new Exception("Post não encontrado");
-
-        if (post.StatusPost != StatusPost.Rascunho)
-            throw new Exception("Apenas posts em Rascunho podem ser enviados para revisão.");
         
         post.StatusPost = StatusPost.EmRevisao;
         post.DataCriacao = DateTime.UtcNow;
@@ -327,129 +404,89 @@ public class PostService : IPostService
         if (post == null)
             throw new KeyNotFoundException("Post não encontrado");
 
-        if (post.StatusPost != StatusPost.EmRevisao)
-            throw new InvalidOperationException("Post não está em revisão");
-
-        post.StatusPost = StatusPost.Rascunho;
+        post.StatusPost = StatusPost.Rejeitado;
         post.DataEdicao = DateTime.UtcNow;
 
         await _postRepository.UpdateAsync(post);
     }
-    public async Task<string> UploadImagemAsync(
-        int postId,
-        Stream fileStream,
-        string fileName,
-        string contentType
-    )
-    {
-        var post = await _postRepository.GetByIdAsync(postId);
-
-        if (post == null)
-            throw new Exception("Post não encontrado");
-
-        var uploadsFolder = Path.Combine(
-            Directory.GetCurrentDirectory(),
-            "wwwroot",
-            "uploads"
-        );
-
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
-
-        var newFileName = $"{Guid.NewGuid()}_{fileName}";
-        var filePath = Path.Combine(uploadsFolder, newFileName);
-
-        using var stream = new FileStream(filePath, FileMode.Create);
-        await fileStream.CopyToAsync(stream);
-
-        var url = $"http://localhost:5091/uploads/{newFileName}";
-
-        post.Imagens.Add(new PostImagem
-        {
-            Ordem = post.Imagens.Count + 1,
-            Tipo = TipoMidia.Imagem
-        });
-
-        await _postRepository.UpdateAsync(post);
-        await _postRepository.SaveChangesAsync();
-
-        return url;
-    }
-    
     public async Task SetDestaqueAsync(int postId, bool destaque)
     {
         await _postRepository.SetDestaqueAsync(postId, destaque);
     }
+    
     public async Task CreateAsync(PostCreateViewModel model)
     {
-        if (model.SubcategoriaId.HasValue)
-        {
-            var subcategoria = await _subcategoriaRepository
-                .GetByIdAsync(model.SubcategoriaId.Value);
+    // Valida subcategoria
+    if (model.SubcategoriaId.HasValue)
+    {
+        var subcategoria = await _subcategoriaRepository
+            .GetByIdAsync(model.SubcategoriaId.Value);
 
-            if (subcategoria == null)
-                throw new Exception("Subcategoria não encontrada.");
+        if (subcategoria == null)
+            throw new Exception("Subcategoria não encontrada.");
 
-            if (subcategoria.EditorialId != model.EditorialId)
-                throw new Exception("Subcategoria não pertence ao Editorial informado.");
-        }
-        var post = new Post
-        {
-            Titulo = model.Titulo,
-            Subtitulo = model.Subtitulo,
-            Conteudo = model.Conteudo,
-            Imagem = model.Imagem,
-            Slug = model.Slug,
-            EditorialId = model.EditorialId,
-            EmissoraId = model.EmissoraId,
-            SubcategoriaId = model.SubcategoriaId,
-            CidadeId = model.CidadeId,
-            UsuarioCriacaoId = model.UsuarioCriacaoId,
-            UsuarioAprovacaoId = null,
-            StatusPost = StatusPost.Rascunho,
-            DataCriacao = DateTime.UtcNow
-        };
-        
-        foreach (var tagNome in model.Tags)
-        {
-            var slug = tagNome.ToLower().Replace(" ", "-");
-
-            var existingTag = await _tagRepository.GetBySlugAsync(slug);
-
-            Tag tag;
-
-            if (existingTag == null)
-            {
-                tag = new Tag
-                {
-                    Nome = tagNome,
-                    Slug = slug
-                };
-
-                await _tagRepository.AddAsync(tag);
-            }
-            else
-            {
-                tag = existingTag;
-            }
-
-            post.PostTags.Add(new PostTag
-            {
-                TagId = tag.Id
-            });
-        }
-        foreach (var midia in model.Midias)
-        {
-            post.Imagens.Add(new PostImagem
-            {
-                MidiaId = midia.MidiaId,
-                Ordem = midia.Ordem,
-                Tipo = midia.Tipo
-            });
-        }
-        await _postRepository.AddAsync(post);
-        await _postRepository.SaveChangesAsync();
+        if (subcategoria.EditorialId != model.EditorialId)
+            throw new Exception("Subcategoria não pertence ao Editorial informado.");
     }
+
+    // Valida capa: se informada, precisa existir na tabela Midia
+    if (model.ImagemCapaId.HasValue)
+    {
+        var midiaExiste = await _midiaRepository.ExistsAsync(model.ImagemCapaId.Value);
+        if (!midiaExiste)
+            throw new Exception("Mídia de capa não encontrada.");
+    }
+
+    var post = new Post
+    {
+        Titulo = model.Titulo,
+        Subtitulo = model.Subtitulo,
+        Conteudo = model.Conteudo,
+        Slug = model.Slug,
+        EditorialId = model.EditorialId,
+        EmissoraId = model.EmissoraId,
+        SubcategoriaId = model.SubcategoriaId,
+        CidadeId = model.CidadeId,
+        UsuarioCriacaoId = model.UsuarioCriacaoId,
+        UsuarioAprovacaoId = null,
+        StatusPost = StatusPost.Rascunho,
+        DataCriacao = DateTime.UtcNow,
+        ImagemCapaId = model.ImagemCapaId  // <-- capa vinculada aqui
+    };
+
+    // Tags
+    foreach (var tagNome in model.Tags)
+    {
+        var slug = tagNome.ToLower().Replace(" ", "-");
+        var existingTag = await _tagRepository.GetBySlugAsync(slug);
+
+        Tag tag;
+        if (existingTag == null)
+        {
+            tag = new Tag { Nome = tagNome, Slug = slug };
+            await _tagRepository.AddAsync(tag);
+        }
+        else
+        {
+            tag = existingTag;
+        }
+
+        post.PostTags.Add(new PostTag { TagId = tag.Id });
+    }
+    
+    // Mídias do corpo do post (galeria / vídeos)
+    // foreach (var midia in model.Midias)
+    // {
+    //     post.Imagens.Add(new PostImagem
+    //     {
+    //         MidiaId = midia.MidiaId,
+    //         Ordem = midia.Ordem,
+    //         Tipo = midia.Tipo
+    //     });
+    // }
+    await _postRepository.AddAsync(post);
+    await _postRepository.SaveChangesAsync();
+}
     public async Task UpdateAsync(int id, PostUpdateViewModel model)
     {
         var post = await _postRepository.GetByIdAsync(id);
@@ -472,13 +509,11 @@ public class PostService : IPostService
         post.Titulo = model.Titulo;
         post.Subtitulo = model.Subtitulo;
         post.Conteudo = model.Conteudo;
-        post.Imagem = model.Imagem;
         post.Slug = model.Slug;
         post.EditorialId = model.EditorialId;
         post.SubcategoriaId = model.SubcategoriaId;
         post.EmissoraId = model.EmissoraId;
         post.CidadeId = model.CidadeId;
-        post.StatusPost = model.StatusPost;
         post.DataEdicao = DateTime.UtcNow;
 
         // -------- TAGS --------
@@ -513,26 +548,8 @@ public class PostService : IPostService
                 TagId = tag.Id
             });
         }
-
-        // -------- MIDIAS --------
-
+        
         post.Imagens.Clear();
-
-        foreach (var midia in model.Midias)
-        {
-            var midiaEntity = await _midiaRepository.GetByIdAsync(midia.MidiaId);
-
-            if (midiaEntity == null)
-                throw new Exception("Midia não encontrada");
-
-            post.Imagens.Add(new PostImagem
-            {
-                MidiaId = midia.MidiaId,
-                UrlPost = midiaEntity.Url,
-                Ordem = midia.Ordem,
-                Tipo = midia.Tipo
-            });
-        }
 
         await _postRepository.UpdateAsync(post);
         await _postRepository.SaveChangesAsync();

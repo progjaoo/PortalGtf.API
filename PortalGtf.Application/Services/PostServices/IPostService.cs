@@ -1,4 +1,5 @@
 using PortalGtf.Application.ViewModels.PostsVM;
+using PortalGtf.Core.Entities;
 using PortalGtf.Core.Enums;
 
 namespace PortalGtf.Application.Services.PostServices;
@@ -21,6 +22,8 @@ public interface IPostService
     Task<List<PostListViewModel>> GetDestaquesbByFatoPopularAsync();
     Task<List<PostListViewModel>> GetDestaquesbBy88FmAsync();
     Task SetDestaqueAsync(int postId, bool destaque);
+    Task<List<PostListViewModel>> GetAllPostsByStatusRascunho();
+    Task<List<PostListViewModel>> GetAllPostsByStatusRevisao();
     //TODO: PARTE DE SEO
     Task<PostDetailViewModel?> GetBySlugAsync(string slug);
     Task<string> GenerateSitemapAsync();
@@ -31,5 +34,5 @@ public interface IPostService
     Task UpdateAsync(int id, PostUpdateViewModel model);
     Task DeleteAsync(int id);
 
-    Task<string> UploadImagemAsync(int postId, Stream fileStream,string fileName, string contentType);
+    // Task<string> UploadImagemAsync(int postId, Stream fileStream,string fileName, string contentType);
 }

@@ -6,7 +6,7 @@ public class PostImagem
 {
     public int Id { get; set; }
     public int PostId { get; set; }
-    public string UrlPost { get; set; }
+    // public string UrlPost { get; set; }
     public Post Post { get; set; } = null!;
     public int MidiaId { get; set; }
     public Midia Midia { get; set; } = null!;

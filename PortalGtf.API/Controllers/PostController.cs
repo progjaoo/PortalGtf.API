@@ -50,6 +50,18 @@ namespace PortalGtf.API.Controllers
             var result = await _service.GetAllAsync();
             return Ok(result);
         }
+        [HttpGet("buscarTodosRascunhos")]
+        public async Task<IActionResult> GetAllByRascunho()
+        {
+            var result = await _service.GetAllPostsByStatusRascunho();
+            return Ok(result);
+        }
+        [HttpGet("buscarTodasRevisoes")]
+        public async Task<IActionResult> GetAllByRevisao()
+        {
+            var result = await _service.GetAllPostsByStatusRevisao();
+            return Ok(result);
+        }
         [HttpGet("regiao/{regiaoId}")]
         public async Task<IActionResult> GetByRegiao(
             int regiaoId,
@@ -124,7 +136,7 @@ namespace PortalGtf.API.Controllers
             var result = await _service.SearchAsync(query);
             return Ok(result);
         }
-        [HttpGet("admin/status")]
+        [HttpGet("status")]
         public async Task<IActionResult> GetByStatus([FromQuery] StatusPost statusPost)
         {
             var result = await _service.GetByStatusAsync(statusPost);
@@ -167,17 +179,22 @@ namespace PortalGtf.API.Controllers
         /// <summary>
         /// Criar novo post
         /// </summary>
-        [HttpPost("createPost")]
-        public async Task<IActionResult> Create([FromBody] PostCreateViewModel model)
+        [HttpPost("criarPost")]
+        public async Task<IActionResult> Criar([FromBody] PostCreateViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
-            await _service.CreateAsync(model);
+            try
+            {
+                await _service.CreateAsync(model);
 
-            return Created("", new { message = "Post criado com sucesso" });
+                return Ok(new { message = "Post criado com sucesso como rascunho." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
-        
         /// <summary>
         /// Atualizar post
         /// </summary>
@@ -232,23 +249,6 @@ namespace PortalGtf.API.Controllers
             await _service.RejeitarPostAsync(id);
 
             return Ok(new { message = "Post rejeitado" });
-        }
-        [HttpPost("{id}/upload-imagem")]
-        public async Task<IActionResult> UploadImagem(int id, IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-                return BadRequest("Arquivo inválido");
-
-            using var stream = file.OpenReadStream();
-
-            var result = await _service.UploadImagemAsync(
-                id,
-                stream,
-                file.FileName,
-                file.ContentType
-            );
-
-            return Ok(new { url = result });
         }
     }
 }

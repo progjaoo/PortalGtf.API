@@ -8,34 +8,8 @@ namespace PortalGtf.API.Controllers;
 [Route("api/media")]
 public class MediaController : ControllerBase
 {
-    private readonly IWebHostEnvironment _env;
     private readonly IMidiaService _service;
-    public MediaController(IWebHostEnvironment env,  IMidiaService service)
-    {
-        _env = env;
-        _service = service;
-    }
-    [HttpPost("uploadAntigo")]
-    public async Task<IActionResult> Upload(IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-            return BadRequest("Arquivo inválido.");
-
-        var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
-
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
-
-        var fileName = $"{Guid.NewGuid()}_{file.FileName}";
-        var filePath = Path.Combine(uploadsFolder, fileName);
-
-        using var stream = new FileStream(filePath, FileMode.Create);
-        await file.CopyToAsync(stream);
-
-        var url = $"{Request.Scheme}://{Request.Host}/uploads/{fileName}";
-
-        return Ok(new { url });
-    }
+    public MediaController(IMidiaService service) => _service = service;
 
     [HttpPost("upload")]
     public async Task<IActionResult> Upload(IFormFile file, int usuarioId)
@@ -44,21 +18,46 @@ public class MediaController : ControllerBase
             return BadRequest("Arquivo inválido");
 
         using var stream = file.OpenReadStream();
+        var result = await _service.UploadAsync(
+            stream, file.FileName, file.ContentType, usuarioId);
 
-        var url = await _service.UploadAsync(
-            stream,
-            file.FileName,
-            file.ContentType,
-            usuarioId
-        );
-
-        return Ok(new { url });
+        return Ok(result);
     }
-
     [HttpGet]
     public async Task<IActionResult> GetPaged(int page = 1, int pageSize = 20)
     {
         var result = await _service.GetPagedAsync(page, pageSize);
         return Ok(result);
+    }
+    
+    [HttpGet("{id}/download")]
+    public async Task<IActionResult> Download(int id)
+    {
+        try
+        {
+            var midia = await _service.DownloadAsync(id);
+
+            return File(
+                midia.Stream,
+                midia.ContentType,
+                midia.FileName);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        try
+        {
+            await _service.DeleteAsync(id);
+            return NoContent(); 
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 }

@@ -24,4 +24,8 @@ public class PostDetailViewModel
     public List<string> Tags { get; set; } = new();
     
     public int TotalVisualizacoes { get; set; }
+    
+    public List<PostImagemViewModel> Midias { get; set; } = new();
+    public string? ImagemCapaUrl { get; set; }
+    public int? ImagemCapaId { get; set; }
 }

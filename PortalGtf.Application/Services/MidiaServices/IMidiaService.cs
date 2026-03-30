@@ -1,9 +1,18 @@
+using PortalGtf.Application.ViewModels.MidiaVM;
+using PortalGtf.Application.ViewModels.PostsVM;
 using PortalGtf.Core.Entities;
 
 namespace PortalGtf.Application.Services.MidiaServices;
 
 public interface IMidiaService
 {
-    Task<string> UploadAsync(Stream fileStream, string fileName, string contentType, int usuarioId);
-    Task<List<Midia>> GetPagedAsync(int page, int pageSize);
+    Task<MidiaDto> UploadAsync(
+        Stream fileStream,
+        string fileName,
+        string contentType,
+        int usuarioId);    
+
+    Task<PagedResult<MidiaDto>> GetPagedAsync(int page, int pageSize);
+    Task<MidiaDownloadViewModel> DownloadAsync(int id);
+    Task DeleteAsync(int id);
 }

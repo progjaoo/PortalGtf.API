@@ -124,6 +124,12 @@ public class PortalGtfNewsDbContext : DbContext
          * POST
          * ============================ */
         modelBuilder.Entity<Post>()
+            .HasOne(p => p.ImagemCapa)
+            .WithMany()
+            .HasForeignKey(p => p.ImagemCapaId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        modelBuilder.Entity<Post>()
             .HasOne(p => p.Editorial)
             .WithMany(e => e.Posts)
             .HasForeignKey(p => p.EditorialId);

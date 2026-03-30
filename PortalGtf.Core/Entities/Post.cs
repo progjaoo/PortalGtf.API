@@ -8,7 +8,11 @@ public class Post
     public string Titulo { get; set; } = null!; 
     public string Subtitulo { get; set; } = null!;
     public string Conteudo { get; set; } = null!;
-    public string? Imagem { get; set; } 
+    // public string? Imagem { get; set; } 
+    
+    public int? ImagemCapaId { get; set; }
+    public Midia? ImagemCapa { get; set; }
+    
     public string Slug { get; set; } = null!;
     public int EditorialId { get; set; }
     public Editorial Editorial { get; set; } = null!;
@@ -33,7 +37,9 @@ public class Post
     public ICollection<PostVisualizacao> Visualizacoes { get; set; } = new List<PostVisualizacao>();
     public ICollection<PostComentario> PostComentarios { get; set; } = new List<PostComentario>();
     public ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
-
+    
+    public string? CapaUrl => ImagemCapa?.Url;
+    
     public void Aprovar()
     {
         if (StatusPost != StatusPost.EmRevisao && StatusPost != StatusPost.Rascunho)

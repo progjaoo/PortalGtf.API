@@ -17,7 +17,11 @@ public class MidiaRepository : IMidiaRepository
 
     public async Task<Midia?> GetByIdAsync(int id)
         => await _context.Midia.FindAsync(id);
+    public async Task<int> GetTotalCountAsync()
+        => await _context.Midia.CountAsync();
 
+    public async Task DeleteAsync(Midia midia)
+        => _context.Midia.Remove(midia);
     public async Task<List<Midia>> GetPagedAsync(int page, int pageSize)
         => await _context.Midia
             .OrderByDescending(m => m.DataUpload)
@@ -33,4 +37,7 @@ public class MidiaRepository : IMidiaRepository
 
     public async Task SaveChangesAsync()
         => await _context.SaveChangesAsync();
+    
+    public async Task<bool> ExistsAsync(int id)
+        => await _context.Midia.AnyAsync(m => m.Id == id);
 }

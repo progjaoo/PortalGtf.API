@@ -19,6 +19,8 @@ public interface IPostRepository
     Task<List<Post>> GetDestaquesAsync();
     Task<List<Post>> GetDestaquesByFatoPopularAsync();
     Task<List<Post>> GetDestaquesBy88FmAsync();
+    Task<List<Post>> GetAllPostsByStatusRascunho();
+    Task<List<Post>> GetAllPostsByStatusRevisao();
     Task SetDestaqueAsync(int postId, bool destaque);
     //TODO: PARTE DE SEO
     Task<Post?> GetBySlugAsync(string slug);

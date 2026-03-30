@@ -8,7 +8,7 @@ public class PostResumeViewModel
     public string Slug { get; set; } = null!;
     public string? Imagem { get; set; }
     public DateTime? PublicadoEm { get; set; }
-
+    
     public string Editorial { get; set; } = null!;
     public string CorTema { get; set; } = null!;
     public int UsuarioCriacaoId { get; set; }
@@ -19,4 +19,8 @@ public class PostResumeViewModel
     public string EmissoraNome { get; set; } = null!;
     public string EmissoraSlug { get; set; } = null!;
     public string EmissoraLogo { get; set; } = null!;
+    
+    public List<PostImagemViewModel> Midias { get; set; } = new();
+    public string? ImagemCapaUrl { get; set; }
+    public int? ImagemCapaId { get; set; }
 }

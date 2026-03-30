@@ -25,7 +25,9 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.UsuarioCriacao)
             .Include(p => p.Cidade)
+            .Include(p => p.ImagemCapa) 
             .Include(p => p.Imagens)
+                .ThenInclude(pi => pi.Midia)
             .OrderByDescending(p => p.DataCriacao);
     }
     public async Task<List<Post>> GetAllAsync()
@@ -46,11 +48,14 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.Cidade)
             .Include(p => p.UsuarioCriacao)
-            .Where(p => 
-                p.StatusPost == StatusPost.Publicado && 
-                p.Emissora.Ativa && 
-                p.Emissora.EmissoraRegioes.Any(er => er.RegiaoId == regiaoId)
-            );
+            .Include(p => p.ImagemCapa) 
+            .Include(p => p.Imagens)
+                .ThenInclude(pi => pi.Midia)
+                .Where(p => 
+                    p.StatusPost == StatusPost.Publicado && 
+                    p.Emissora.Ativa && 
+                    p.Emissora.EmissoraRegioes.Any(er => er.RegiaoId == regiaoId)
+                );
 
         var totalCount = await query.CountAsync();
 
@@ -165,6 +170,9 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.Cidade)
             .Include(p => p.UsuarioCriacao)
+            .Include(p => p.ImagemCapa) 
+            .Include(p => p.Imagens)
+                .ThenInclude(pi => pi.Midia)
             .OrderByDescending(p => p.PublicadoEm)
             .Take(20)
             .ToListAsync();
@@ -181,11 +189,26 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.Cidade)
             .Include(p => p.UsuarioCriacao)
+            .Include(p => p.ImagemCapa) 
+            .Include(p => p.Imagens)
+            .ThenInclude(pi => pi.Midia)
             .OrderByDescending(p => p.PublicadoEm)
             .Take(20)
             .ToListAsync();
     }
 
+    public async Task<List<Post>> GetAllPostsByStatusRascunho()
+    {
+        return await BaseQuery()
+            .Where(p => p.StatusPost == StatusPost.Rascunho)
+            .ToListAsync();
+    }
+    public async Task<List<Post>> GetAllPostsByStatusRevisao()
+    {
+        return await BaseQuery()
+            .Where(p => p.StatusPost == StatusPost.EmRevisao || p.StatusPost == StatusPost.Rejeitado)
+            .ToListAsync();
+    }
     // Destaques do Fato Popular
     public async Task<List<Post>> GetDestaquesByFatoPopularAsync()
     {
@@ -198,6 +221,9 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.Cidade)
             .Include(p => p.UsuarioCriacao)
+            .Include(p => p.ImagemCapa) 
+            .Include(p => p.Imagens)
+            .ThenInclude(pi => pi.Midia)
             .OrderByDescending(p => p.PublicadoEm)
             .Take(20)
             .ToListAsync();
@@ -224,6 +250,9 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.UsuarioCriacao)
             .Include(p => p.Cidade)
+            .Include(p => p.ImagemCapa) 
+            .Include(p => p.Imagens)
+            .ThenInclude(pi => pi.Midia)
             .FirstOrDefaultAsync(p =>
                 p.Slug == slug &&
                 p.StatusPost == StatusPost.Publicado);
