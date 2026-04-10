@@ -5,5 +5,6 @@ public enum StatusPost
     Rascunho = 0,
     EmRevisao = 1,
     Publicado = 2,
-    Rejeitado = 3
+    Rejeitado = 3,
+    ParaAprovacao = 4
 }

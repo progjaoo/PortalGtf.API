@@ -12,22 +12,48 @@ public class PostService : IPostService
     private readonly IMidiaRepository _midiaRepository;
     private readonly ITagRepository _tagRepository;
     private readonly ISubcategoriaRepository _subcategoriaRepository;
-    public PostService(IPostRepository postRepository,ITagRepository tagRepository, IMidiaRepository midiaRepository,ISubcategoriaRepository subcategoriaRepository)
+    private readonly ICidadeRepository _cidadeRepository;
+    private readonly IEmissoraRepository _emissoraRepository;
+    private readonly IEditorialRepository _editorialRepository;
+    public PostService(
+        IPostRepository postRepository,
+        ITagRepository tagRepository,
+        IMidiaRepository midiaRepository,
+        ISubcategoriaRepository subcategoriaRepository,
+        ICidadeRepository cidadeRepository,
+        IEmissoraRepository emissoraRepository,
+        IEditorialRepository editorialRepository)
     {
         _postRepository = postRepository;
         _tagRepository = tagRepository;
         _midiaRepository = midiaRepository;
         _subcategoriaRepository = subcategoriaRepository;
+        _cidadeRepository = cidadeRepository;
+        _emissoraRepository = emissoraRepository;
+        _editorialRepository = editorialRepository;
     }
+
+    private static PostHistorico? GetUltimoHistoricoRevisao(Post post)
+    {
+        return post.Historicos?
+            .Where(h => h.Acao == "ENVIADO_PARA_REVISAO")
+            .OrderByDescending(h => h.DataAcao)
+            .FirstOrDefault();
+    }
+
     private static PostListViewModel MapToListVM(Post p)
     {
+        var ultimaRevisao = GetUltimoHistoricoRevisao(p);
+
         return new PostListViewModel
         {
             Id = p.Id,
             Titulo = p.Titulo,
+            Subtitulo = p.Subtitulo,
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
             Emissora = p.Emissora?.NomeSocial,
+            EmissoraSlug = p.Emissora?.Slug,
             ImagemCapaId = p.ImagemCapaId,
             ImagemCapaUrl = p.ImagemCapa?.Url,
             Status = p.StatusPost.ToString(),
@@ -37,6 +63,9 @@ public class PostService : IPostService
             UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = p.UsuarioCriacaoId,
             Cidade = p.Cidade?.Nome ?? "",
+            MensagemRevisao = ultimaRevisao?.Mensagem,
+            DataMensagemRevisao = ultimaRevisao?.DataAcao,
+            UsuarioMensagemRevisao = ultimaRevisao?.Usuario?.NomeCompleto,
             Midias = p.Imagens?.Select(i => new PostImagemViewModel
             {
                 MidiaId = i.MidiaId,
@@ -61,9 +90,11 @@ public class PostService : IPostService
             Editorial = p.Editorial?.TipoPostagem,
             CorTema = p.Editorial?.TemaEditorial?.CorPrimaria,
             Emissora = p.Emissora?.NomeSocial,
+            EmissoraSlug = p.Emissora?.Slug,
             UsuarioCriacao = p.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = p.UsuarioCriacaoId,
             Cidade = p.Cidade?.Nome ?? "",
+            TotalVisualizacoes = p.Visualizacoes?.Count ?? 0,
             Midias = p.Imagens?.Select(i => new PostImagemViewModel
             {
                 MidiaId = i.MidiaId,
@@ -135,8 +166,13 @@ public class PostService : IPostService
             ImagemCapaUrl = post.ImagemCapa?.Url,
             PublicadoEm = post.PublicadoEm,
             Emissora = post.Emissora.NomeSocial,
+            EmissoraSlug = post.Emissora.Slug,
             Cidade = post.Cidade.Nome,
             Editorial = post.Editorial.TipoPostagem,
+            Subcategoria = post.Subcategoria?.Nome ?? "",
+            UsuarioCriacao = post.UsuarioCriacao?.NomeCompleto ?? "",
+            UsuarioCriacaoId = post.UsuarioCriacaoId,
+            TotalVisualizacoes = post.Visualizacoes?.Count ?? 0,
             Midias = post.Imagens?.Select(i => new PostImagemViewModel
             {
                 MidiaId = i.MidiaId,
@@ -200,16 +236,19 @@ public class PostService : IPostService
             Id = post.Id,
             Titulo = post.Titulo,
             Subtitulo = post.Subtitulo,
+            Slug =  post.Slug,
             Conteudo = post.Conteudo,
             Status = post.StatusPost,
             ImagemCapaId = post.ImagemCapaId,
             ImagemCapaUrl = post.ImagemCapa?.Url,
             Editorial = post.Editorial?.TipoPostagem,
             Emissora = post.Emissora?.NomeSocial,
+            EmissoraSlug = post.Emissora?.Slug,
             Subcategoria =  post.Subcategoria?.Nome,
             UsuarioCriacao = post.UsuarioCriacao?.NomeCompleto ?? "",
             UsuarioCriacaoId = post.UsuarioCriacaoId,
             Cidade = post.Cidade?.Nome ?? "",
+            TotalVisualizacoes = post.Visualizacoes?.Count ?? 0,
             DataCriacao = post.DataCriacao,
             PublicadoEm = post.PublicadoEm,
             
@@ -270,16 +309,12 @@ public class PostService : IPostService
         var posts = await _postRepository
             .GetFilteredAsync(filter.FiltroData, filter.OrdenarPor);
 
-        return posts.Select(p => new PostPublicViewModel
-        {
-            Id = p.Id,
-            Titulo = p.Titulo,
-            Subtitulo = p.Subtitulo,
-            Slug = p.Slug,
-            PublicadoEm = p.PublicadoEm,
-            Emissora = p.Emissora.NomeSocial,
-            Cidade = p.Cidade.Nome
-        }).ToList();
+        return posts.Select(MapToPublicVM).ToList();
+    }
+    public async Task<List<PostPublicViewModel>> GetMostReadAsync(int? emissoraId, int limit, int days)
+    {
+        var posts = await _postRepository.GetMostReadAsync(emissoraId, limit, days);
+        return posts.Select(MapToPublicVM).ToList();
     }
     public async Task<List<PostListViewModel>> GetDestaquesAsync()
     {
@@ -289,9 +324,11 @@ public class PostService : IPostService
         {
             Id = p.Id,
             Titulo = p.Titulo,
+            Subtitulo = p.Subtitulo,
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
             Emissora = p.Emissora?.NomeSocial,
+            EmissoraSlug = p.Emissora?.Slug,
             Status = p.StatusPost.ToString(),
             DataCriacao = p.DataCriacao,
             PublicadoEm = p.PublicadoEm,
@@ -317,9 +354,11 @@ public class PostService : IPostService
         {
             Id = p.Id,
             Titulo = p.Titulo,
+            Subtitulo = p.Subtitulo,
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
             Emissora = p.Emissora?.NomeSocial,
+            EmissoraSlug = p.Emissora?.Slug,
             Status = p.StatusPost.ToString(),
             DataCriacao = p.DataCriacao,
             PublicadoEm = p.PublicadoEm,
@@ -345,9 +384,11 @@ public class PostService : IPostService
         {
             Id = p.Id,
             Titulo = p.Titulo,
+            Subtitulo = p.Subtitulo,
             Conteudo = p.Conteudo,
             Editorial = p.Editorial?.TipoPostagem,
             Emissora = p.Emissora?.NomeSocial,
+            EmissoraSlug = p.Emissora?.Slug,
             Status = p.StatusPost.ToString(),
             DataCriacao = p.DataCriacao,
             PublicadoEm = p.PublicadoEm,
@@ -370,18 +411,28 @@ public class PostService : IPostService
     #region COMMANDS - AÇÕES NO SISTEMA
     // COMMANDS PRINCIPAIS
     
-    public async Task EnviarParaRevisaoAsync(int postId)
+    public async Task EnviarParaRevisaoAsync(int postId, PostEnviarRevisaoViewModel model)
     {
         var post = await _postRepository.GetByIdAsync(postId);
 
         if (post == null)
             throw new Exception("Post não encontrado");
+
+        if (string.IsNullOrWhiteSpace(model.Mensagem))
+            throw new Exception("É obrigatório informar a mensagem de revisão.");
         
         post.StatusPost = StatusPost.EmRevisao;
-        post.DataCriacao = DateTime.UtcNow;
+        post.DataEdicao = DateTime.UtcNow;
         
         await _postRepository.UpdateAsync(post);
-        await _postRepository.SaveChangesAsync();
+        await _postRepository.AddHistoricoAsync(new PostHistorico
+        {
+            PostId = post.Id,
+            UsuarioId = model.UsuarioId,
+            Acao = "ENVIADO_PARA_REVISAO",
+            Mensagem = model.Mensagem.Trim(),
+            DataAcao = DateTime.UtcNow,
+        });
     }
 
 
@@ -396,7 +447,17 @@ public class PostService : IPostService
 
         await _postRepository.UpdateAsync(post);
     }
+    public async Task EnviarParaAprovacao(int postId)
+    {
+        var post = await _postRepository.GetByIdAsync(postId);
 
+        if (post == null)
+            throw new KeyNotFoundException("Post não encontrado");
+
+        post.EnviarParaAprovacao();
+
+        await _postRepository.UpdateAsync(post);
+    }
     public async Task RejeitarPostAsync(int postId)
     {
         var post = await _postRepository.GetByIdAsync(postId);
@@ -413,9 +474,34 @@ public class PostService : IPostService
     {
         await _postRepository.SetDestaqueAsync(postId, destaque);
     }
+    public async Task RegisterViewAsync(int postId, string? ip)
+    {
+        await _postRepository.AddViewAsync(postId, ip);
+    }
     
     public async Task CreateAsync(PostCreateViewModel model)
     {
+    if (model.EmissoraId <= 0)
+        throw new Exception("Selecione uma emissora válida.");
+
+    if (model.CidadeId <= 0)
+        throw new Exception("Selecione uma cidade válida.");
+
+    var emissora = await _emissoraRepository.GetByIdAsync(model.EmissoraId);
+    if (emissora == null)
+        throw new Exception("Emissora não encontrada.");
+
+    var cidade = await _cidadeRepository.GetByIdAsync(model.CidadeId);
+    if (cidade == null)
+        throw new Exception("Cidade não encontrada.");
+
+    var editorial = await _editorialRepository.GetByIdAsync(model.EditorialId);
+    if (editorial == null)
+        throw new Exception("Editorial não encontrado.");
+
+    if (editorial.EmissoraId != model.EmissoraId)
+        throw new Exception("O editorial selecionado não pertence à emissora informada.");
+
     // Valida subcategoria
     if (model.SubcategoriaId.HasValue)
     {
@@ -494,6 +580,27 @@ public class PostService : IPostService
         if (post == null)
             throw new Exception("Post não encontrado.");
 
+        if (model.EmissoraId <= 0)
+            throw new Exception("Selecione uma emissora válida.");
+
+        if (model.CidadeId <= 0)
+            throw new Exception("Selecione uma cidade válida.");
+
+        var emissora = await _emissoraRepository.GetByIdAsync(model.EmissoraId);
+        if (emissora == null)
+            throw new Exception("Emissora não encontrada.");
+
+        var cidade = await _cidadeRepository.GetByIdAsync(model.CidadeId);
+        if (cidade == null)
+            throw new Exception("Cidade não encontrada.");
+
+        var editorial = await _editorialRepository.GetByIdAsync(model.EditorialId);
+        if (editorial == null)
+            throw new Exception("Editorial não encontrado.");
+
+        if (editorial.EmissoraId != model.EmissoraId)
+            throw new Exception("O editorial selecionado não pertence à emissora informada.");
+
         if (model.SubcategoriaId.HasValue)
         {
             var subcategoria = await _subcategoriaRepository
@@ -510,47 +617,42 @@ public class PostService : IPostService
         post.Subtitulo = model.Subtitulo;
         post.Conteudo = model.Conteudo;
         post.Slug = model.Slug;
+        post.ImagemCapaId = model.ImagemCapaId;
         post.EditorialId = model.EditorialId;
         post.SubcategoriaId = model.SubcategoriaId;
         post.EmissoraId = model.EmissoraId;
         post.CidadeId = model.CidadeId;
+        post.UsuarioCriacaoId = model.UsuarioCriacaoId;
         post.DataEdicao = DateTime.UtcNow;
 
         // -------- TAGS --------
 
         post.PostTags.Clear();
+        await _postRepository.SaveChangesAsync(); 
 
         foreach (var tagNome in model.Tags)
         {
-            var slug = tagNome.ToLower().Replace(" ", "-");
-
+            var slug = tagNome.ToLower().Trim().Replace(" ", "-");
             var existingTag = await _tagRepository.GetBySlugAsync(slug);
 
             Tag tag;
-
             if (existingTag == null)
             {
-                tag = new Tag
-                {
-                    Nome = tagNome,
-                    Slug = slug
-                };
-
+                tag = new Tag { Nome = tagNome, Slug = slug };
                 await _tagRepository.AddAsync(tag);
+                await _tagRepository.SaveChangesAsync(); 
             }
             else
             {
                 tag = existingTag;
             }
 
-            post.PostTags.Add(new PostTag
-            {
-                TagId = tag.Id
+            post.PostTags.Add(new PostTag 
+            { 
+                PostId = post.Id, 
+                TagId = tag.Id 
             });
         }
-        
-        post.Imagens.Clear();
-
         await _postRepository.UpdateAsync(post);
         await _postRepository.SaveChangesAsync();
     }

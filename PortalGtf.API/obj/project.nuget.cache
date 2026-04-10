@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PAzbdQkZX/c=",
+  "dgSpecHash": "3B3xqTZYhNs=",
   "success": true,
-  "projectFilePath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.API/PortalGtf.API.csproj",
+  "projectFilePath": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.API/PortalGtf.API.csproj",
   "expectedPackageFiles": [
     "/Users/joaomvalente/.nuget/packages/fluentftp/53.0.2/fluentftp.53.0.2.nupkg.sha512",
     "/Users/joaomvalente/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/10.0.1/microsoft.aspnetcore.authentication.jwtbearer.10.0.1.nupkg.sha512",

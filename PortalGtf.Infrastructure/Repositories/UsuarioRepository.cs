@@ -25,7 +25,6 @@ public class UsuarioRepository : IUsuarioRepository
     public async Task<Usuario?> GetByIdAsync(int id)
     {
         return await _context.Usuario
-            .AsNoTracking()
             .Include(u => u.Funcao)
             .SingleOrDefaultAsync(u => u.Id == id);
     }
@@ -46,6 +45,11 @@ public class UsuarioRepository : IUsuarioRepository
     public async Task UpdateAsync(Usuario usuario)
     {
         _context.Usuario.Update(usuario);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task SaveChangesAsync()
+    {
         await _context.SaveChangesAsync();
     }
 }

@@ -22,7 +22,8 @@ public class EstadoService : IEstadoService
         {
             Id = e.Id,
             Nome = e.Nome,
-            Sigla = e.Sigla
+            Sigla = e.Sigla,
+            RegiaoId = e.RegiaoId
         }).ToList();
     }
 
@@ -37,7 +38,8 @@ public class EstadoService : IEstadoService
         {
             Id = estado.Id,
             Nome = estado.Nome,
-            Sigla = estado.Sigla
+            Sigla = estado.Sigla,
+            RegiaoId = estado.RegiaoId
         };
     }
 
@@ -46,7 +48,8 @@ public class EstadoService : IEstadoService
         var estado = new Estado
         {
             Nome = model.Nome,
-            Sigla = model.Sigla
+            Sigla = model.Sigla,
+            RegiaoId = model.RegiaoId
         };
 
         await _estadoRepository.AddAsync(estado);
@@ -62,6 +65,7 @@ public class EstadoService : IEstadoService
 
         estado.Nome = model.Nome;
         estado.Sigla = model.Sigla;
+        estado.RegiaoId = model.RegiaoId;
 
         await _estadoRepository.UpdateAsync(estado);
         return true;

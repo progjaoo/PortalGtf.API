@@ -26,8 +26,11 @@ public class PostRepository : IPostRepository
             .Include(p => p.UsuarioCriacao)
             .Include(p => p.Cidade)
             .Include(p => p.ImagemCapa) 
+            .Include(p => p.Visualizacoes)
             .Include(p => p.Imagens)
                 .ThenInclude(pi => pi.Midia)
+            .Include(p => p.Historicos)
+                .ThenInclude(h => h.Usuario)
             .OrderByDescending(p => p.DataCriacao);
     }
     public async Task<List<Post>> GetAllAsync()
@@ -70,7 +73,7 @@ public class PostRepository : IPostRepository
     public async Task<List<Post>> GetByEditorialAsync(int editorialId)
     {
         return await BaseQuery()
-            .Where(p => p.EditorialId == editorialId)
+            .Where(p => p.EditorialId == editorialId && p.StatusPost == StatusPost.Publicado)
             .ToListAsync();
     }
 
@@ -133,6 +136,10 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.UsuarioCriacao)
             .Include(p => p.Cidade)
+            .Include(p => p.ImagemCapa)
+            .Include(p => p.Visualizacoes)
+            .Include(p => p.Imagens)
+                .ThenInclude(pi => pi.Midia)
             .Where(p => p.StatusPost == StatusPost.Publicado);
 
         // FILTRO DE DATA
@@ -200,7 +207,7 @@ public class PostRepository : IPostRepository
     public async Task<List<Post>> GetAllPostsByStatusRascunho()
     {
         return await BaseQuery()
-            .Where(p => p.StatusPost == StatusPost.Rascunho)
+            .Where(p => p.StatusPost == StatusPost.Rascunho || p.StatusPost == StatusPost.ParaAprovacao)
             .ToListAsync();
     }
     public async Task<List<Post>> GetAllPostsByStatusRevisao()
@@ -228,6 +235,39 @@ public class PostRepository : IPostRepository
             .Take(20)
             .ToListAsync();
     }
+
+    public async Task<List<Post>> GetMostReadAsync(int? emissoraId, int limit, int days)
+    {
+        if (limit <= 0) limit = 4;
+        if (days <= 0) days = 7;
+
+        var startDate = DateTime.UtcNow.AddDays(-days);
+
+        var query = _dbContext.Post
+            .AsNoTracking()
+            .Include(p => p.Editorial)
+                .ThenInclude(e => e.TemaEditorial)
+            .Include(p => p.Emissora)
+            .Include(p => p.Cidade)
+            .Include(p => p.UsuarioCriacao)
+            .Include(p => p.ImagemCapa)
+            .Include(p => p.Imagens)
+                .ThenInclude(pi => pi.Midia)
+            .Include(p => p.Visualizacoes)
+            .Where(p => p.StatusPost == StatusPost.Publicado);
+
+        if (emissoraId.HasValue)
+        {
+            query = query.Where(p => p.EmissoraId == emissoraId.Value);
+        }
+
+        return await query
+            .OrderByDescending(p => p.Visualizacoes.Count(v => v.DataVisualizacao >= startDate))
+            .ThenByDescending(p => p.PublicadoEm)
+            .Take(limit)
+            .ToListAsync();
+    }
+
     public async Task SetDestaqueAsync(int postId, bool destaque)
     {
         var post = await _dbContext.Post.SingleOrDefaultAsync(p => p.Id == postId);
@@ -240,6 +280,30 @@ public class PostRepository : IPostRepository
 
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task AddViewAsync(int postId, string? ip)
+    {
+        var exists = await _dbContext.Post
+            .AsNoTracking()
+            .AnyAsync(p => p.Id == postId && p.StatusPost == StatusPost.Publicado);
+
+        if (!exists)
+            throw new KeyNotFoundException("Post não encontrado");
+
+        await _dbContext.PostVisualizacao.AddAsync(new PostVisualizacao
+        {
+            PostId = postId,
+            Ip = string.IsNullOrWhiteSpace(ip) ? null : ip,
+            DataVisualizacao = DateTime.UtcNow
+        });
+
+        await _dbContext.SaveChangesAsync();
+    }
+    public async Task AddHistoricoAsync(PostHistorico historico)
+    {
+        await _dbContext.PostHistorico.AddAsync(historico);
+        await _dbContext.SaveChangesAsync();
+    }
     //todo: parte de SEO
     public async Task<Post?> GetBySlugAsync(string slug)
     {
@@ -250,9 +314,13 @@ public class PostRepository : IPostRepository
             .Include(p => p.Emissora)
             .Include(p => p.UsuarioCriacao)
             .Include(p => p.Cidade)
+            .Include(p => p.Subcategoria)
             .Include(p => p.ImagemCapa) 
+            .Include(p => p.Visualizacoes)
             .Include(p => p.Imagens)
             .ThenInclude(pi => pi.Midia)
+            .Include(p => p.Historicos)
+            .ThenInclude(h => h.Usuario)
             .FirstOrDefaultAsync(p =>
                 p.Slug == slug &&
                 p.StatusPost == StatusPost.Publicado);

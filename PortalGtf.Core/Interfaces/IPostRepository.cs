@@ -19,9 +19,12 @@ public interface IPostRepository
     Task<List<Post>> GetDestaquesAsync();
     Task<List<Post>> GetDestaquesByFatoPopularAsync();
     Task<List<Post>> GetDestaquesBy88FmAsync();
+    Task<List<Post>> GetMostReadAsync(int? emissoraId, int limit, int days);
     Task<List<Post>> GetAllPostsByStatusRascunho();
     Task<List<Post>> GetAllPostsByStatusRevisao();
     Task SetDestaqueAsync(int postId, bool destaque);
+    Task AddViewAsync(int postId, string? ip);
+    Task AddHistoricoAsync(PostHistorico historico);
     //TODO: PARTE DE SEO
     Task<Post?> GetBySlugAsync(string slug);
     Task<List<Post>> GetAllPublishedForSitemapAsync(); // NÃO ESTÁ IMPLEMENTADO...

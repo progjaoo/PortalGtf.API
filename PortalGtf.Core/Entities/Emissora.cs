@@ -16,8 +16,11 @@ public class Emissora
     public string LogoSmall { get; set; } = null!;
     public string TemaPrincipal { get; set; } = null!;
     public bool Ativa { get; set; }
+    public ICollection<Editorial> Editoriais { get; set; } = new List<Editorial>();
     public ICollection<Post> Posts { get; set; } = new List<Post>();
     public ICollection<UsuarioEmissora> UsuarioEmissoras { get; set; } = new List<UsuarioEmissora>();
     public ICollection<Streaming> Streamings { get; set; } = new List<Streaming>();
     public ICollection<EmissoraRegiao> EmissoraRegioes { get; set; } = new List<EmissoraRegiao>();
+    public ICollection<ProgramacaoRadio> Programacoes { get; set; } = new List<ProgramacaoRadio>();
+    public ICollection<BannerInstitucional> BannersInstitucionais { get; set; } = new List<BannerInstitucional>();
 }

@@ -23,7 +23,6 @@ public class UsuarioController : ControllerBase
         var usuarios = await _usuarioService.GetAllAsync();
         return Ok(usuarios);
     }
-
     [HttpGet("{id:int}")]
     public async Task<ActionResult<UsuarioResponseViewModel>> GetById(int id)
     {
@@ -33,7 +32,6 @@ public class UsuarioController : ControllerBase
 
         return Ok(usuario);
     }
-
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] UsuarioCreateViewModel model)
     {
@@ -54,5 +52,23 @@ public class UsuarioController : ControllerBase
             return Unauthorized("Email ou senha inválidos");
 
         return Ok(result);
+    }
+    [HttpPut("{id}/atualizarUsuario")]
+    public async Task<IActionResult> Update(int id, [FromBody] UsuarioUpdateViewModel model)
+    {
+        await _usuarioService.UpdateAsync(id, model);
+        return NoContent();
+    }
+    [HttpPut("ativarUsuario/{id}")]
+    public async Task<IActionResult> AtivarUsuario(int id)
+    {
+        await _usuarioService.AtivarUsuarioAsync(id);
+        return Ok(new { message = "Usuário ativado com sucesso" });
+    }
+    [HttpPut("desativarUsuario/{id}")]
+    public async Task<IActionResult> DesativarUsuario(int id)
+    {
+        await _usuarioService.DesativarUsuarioAsync(id);
+        return Ok(new { message = "Usuário desativado com sucesso" });
     }
 }

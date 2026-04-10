@@ -886,11 +886,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Infrastructure/PortalGtf.Infrastructure.csproj",
+      "projectUniqueName": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Infrastructure/PortalGtf.Infrastructure.csproj",
       "projectName": "PortalGtf.Infrastructure",
-      "projectPath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Infrastructure/PortalGtf.Infrastructure.csproj",
+      "projectPath": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Infrastructure/PortalGtf.Infrastructure.csproj",
       "packagesPath": "/Users/joaomvalente/.nuget/packages/",
-      "outputPath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Infrastructure/obj/",
+      "outputPath": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Infrastructure/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/joaomvalente/.nuget/NuGet/NuGet.Config"
@@ -906,11 +906,11 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Application/PortalGtf.Application.csproj": {
-              "projectPath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Application/PortalGtf.Application.csproj"
+            "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Application/PortalGtf.Application.csproj": {
+              "projectPath": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Application/PortalGtf.Application.csproj"
             },
-            "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj": {
-              "projectPath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj"
+            "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj": {
+              "projectPath": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj"
             }
           }
         }

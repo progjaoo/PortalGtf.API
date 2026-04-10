@@ -14,11 +14,25 @@ public class EditorialRepository : IEditorialRepository
     }
     public async Task<List<Editorial>> GetAllAsync()
     {
-        return await _dbContext.Editorial.AsNoTracking().ToListAsync();
+        return await _dbContext.Editorial
+            .AsNoTracking()
+            .Include(e => e.Emissora)
+            .ToListAsync();
+    }
+
+    public async Task<List<Editorial>> GetByEmissoraAsync(int emissoraId)
+    {
+        return await _dbContext.Editorial
+            .AsNoTracking()
+            .Include(e => e.Emissora)
+            .Where(e => e.EmissoraId == emissoraId)
+            .ToListAsync();
     }
     public async Task<Editorial?> GetByIdAsync(int id)
     {
-        return await _dbContext.Editorial.SingleOrDefaultAsync(e => e.Id == id); 
+        return await _dbContext.Editorial
+            .Include(e => e.Emissora)
+            .SingleOrDefaultAsync(e => e.Id == id); 
     }
     public async Task AddAsync(Editorial editorial)
     {

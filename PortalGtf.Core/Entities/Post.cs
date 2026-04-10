@@ -37,16 +37,25 @@ public class Post
     public ICollection<PostVisualizacao> Visualizacoes { get; set; } = new List<PostVisualizacao>();
     public ICollection<PostComentario> PostComentarios { get; set; } = new List<PostComentario>();
     public ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
+    public ICollection<PostHistorico> Historicos { get; set; } = new List<PostHistorico>();
     
     public string? CapaUrl => ImagemCapa?.Url;
     
     public void Aprovar()
     {
-        if (StatusPost != StatusPost.EmRevisao && StatusPost != StatusPost.Rascunho)
+        if (StatusPost != StatusPost.EmRevisao && StatusPost != StatusPost.Rascunho && StatusPost != StatusPost.ParaAprovacao)
             throw new InvalidOperationException("Post não pode ser aprovado.");
 
         StatusPost = StatusPost.Publicado;
         DataAprovacao = DateTime.UtcNow;
         PublicadoEm = DateTime.UtcNow;
+    }
+    
+    public void EnviarParaAprovacao()
+    {
+        if (StatusPost != StatusPost.EmRevisao && StatusPost != StatusPost.Rascunho)
+            throw new InvalidOperationException("Post não pode ser enviado para aprovação.");
+
+        StatusPost = StatusPost.ParaAprovacao;
     }
 }

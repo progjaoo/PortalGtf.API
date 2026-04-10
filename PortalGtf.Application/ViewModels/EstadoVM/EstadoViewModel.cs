@@ -5,4 +5,5 @@ public class EstadoViewModel
     public int Id { get; set; }
     public string Nome { get; set; } = null!;
     public string Sigla { get; set; } = null!;
+    public int RegiaoId { get; set; }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj": {}
+    "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj": {}
   },
   "projects": {
-    "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj": {
+    "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj",
+        "projectUniqueName": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj",
         "projectName": "PortalGtf.Core",
-        "projectPath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj",
+        "projectPath": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Core/PortalGtf.Core.csproj",
         "packagesPath": "/Users/joaomvalente/.nuget/packages/",
-        "outputPath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Core/obj/",
+        "outputPath": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/joaomvalente/.nuget/NuGet/NuGet.Config"

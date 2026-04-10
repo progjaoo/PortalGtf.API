@@ -2,6 +2,7 @@ namespace PortalGtf.Application.ViewModels.ProgramacaoVM;
 
 public class ProgramacaoRadioUpdateViewModel
 {
+    public int EmissoraId { get; set; }
     public string NomePrograma { get; set; }
 
     public string? Apresentador { get; set; }

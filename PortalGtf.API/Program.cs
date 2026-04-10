@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PortalGtf.Application.Services.AuthServices;
+using PortalGtf.Application.Services.BannerInstitucionalServices;
 using PortalGtf.Application.Services.CidadeService;
 using PortalGtf.Application.Services.EditorialServices;
 using PortalGtf.Application.Services.EmissoraRegiaoServices;
@@ -92,6 +93,8 @@ builder.Services.AddScoped<IMidiaService, MidiaService>();
 
 builder.Services.AddScoped<IProgramacaoRadiorRepository, ProgramacaoRadiorRepository>();
 builder.Services.AddScoped<IProgramacaoRadioService, ProgramacaoRadioService>();
+builder.Services.AddScoped<IBannerInstitucionalRepository, BannerInstitucionalRepository>();
+builder.Services.AddScoped<IBannerInstitucionalService, BannerInstitucionalService>();
 
 #endregion 
 
@@ -182,3 +185,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

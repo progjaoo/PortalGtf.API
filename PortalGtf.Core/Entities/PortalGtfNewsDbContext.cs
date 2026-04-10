@@ -33,12 +33,13 @@ public class PortalGtfNewsDbContext : DbContext
     public DbSet<UsuarioEmissora> UsuarioEmissora => Set<UsuarioEmissora>();
     public DbSet<Midia> Midia => Set<Midia>();
     public DbSet<ProgramacaoRadio> ProgramacaoRadio => Set<ProgramacaoRadio>();
+    public DbSet<BannerInstitucional> BannerInstitucional => Set<BannerInstitucional>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         
         modelBuilder.Entity<FuncaoPermissao>()
-            .HasKey(fp => new { fp.FuncaoId, fp.PermissaoId });
+            .HasKey(fp => fp.Id);
 
         modelBuilder.Entity<FuncaoPermissao>()
             .HasOne(fp => fp.Funcao)
@@ -100,7 +101,7 @@ public class PortalGtfNewsDbContext : DbContext
          * EMISSORA / REGIÃO (N:N)
          * ============================ */
         modelBuilder.Entity<EmissoraRegiao>()
-            .HasKey(er => new { er.EmissoraId, er.RegiaoId });
+            .HasKey(er => er.Id);
 
         modelBuilder.Entity<EmissoraRegiao>()
             .HasOne(er => er.Emissora)
@@ -119,6 +120,26 @@ public class PortalGtfNewsDbContext : DbContext
             .HasOne(s => s.Emissora)
             .WithMany(e => e.Streamings)
             .HasForeignKey(s => s.EmissoraId);
+
+        modelBuilder.Entity<Editorial>()
+            .HasOne(e => e.Emissora)
+            .WithMany(em => em.Editoriais)
+            .HasForeignKey(e => e.EmissoraId);
+
+        modelBuilder.Entity<ProgramacaoRadio>()
+            .HasOne(p => p.Emissora)
+            .WithMany(e => e.Programacoes)
+            .HasForeignKey(p => p.EmissoraId);
+
+        modelBuilder.Entity<BannerInstitucional>()
+            .HasOne(b => b.Emissora)
+            .WithMany(e => e.BannersInstitucionais)
+            .HasForeignKey(b => b.EmissoraId);
+
+        modelBuilder.Entity<BannerInstitucional>()
+            .HasOne(b => b.Midia)
+            .WithMany(m => m.BannersInstitucionais)
+            .HasForeignKey(b => b.MidiaId);
 
         /* ============================
          * POST
@@ -204,15 +225,19 @@ public class PortalGtfNewsDbContext : DbContext
          * POST HISTÓRICO
          * ============================ */
         
-        /* modelBuilder.Entity<PostHistorico>()
+        modelBuilder.Entity<PostHistorico>()
             .HasOne(ph => ph.Post)
             .WithMany(p => p.Historicos)
-            .HasForeignKey(ph => ph.PostId);*/
+            .HasForeignKey(ph => ph.PostId);
 
         modelBuilder.Entity<PostHistorico>()
             .HasOne(ph => ph.Usuario)
             .WithMany()
             .HasForeignKey(ph => ph.UsuarioId);
+
+        modelBuilder.Entity<PostHistorico>()
+            .Property(ph => ph.Mensagem)
+            .HasMaxLength(1000);
 
         /* ============================
          * COMENTÁRIO

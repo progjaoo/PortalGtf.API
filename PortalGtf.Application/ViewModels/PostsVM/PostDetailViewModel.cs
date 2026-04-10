@@ -19,6 +19,7 @@ public class PostDetailViewModel
     public string Editorial { get; set; } = null!;
     public string Subcategoria { get; set; } = null!;
     public string Emissora { get; set; } = null!;
+    public string? EmissoraSlug { get; set; }
     public string Cidade { get; set; } = null!;
 
     public List<string> Tags { get; set; } = new();

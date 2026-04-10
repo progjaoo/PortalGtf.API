@@ -13,11 +13,32 @@ public class ProgramacaoRadiorRepository : IProgramacaoRadiorRepository
     }
     public async Task<List<ProgramacaoRadio>> GetAllAsync()
     {
-        return await _dbContext.ProgramacaoRadio.OrderBy(p => p.HoraInicio).ToListAsync();
+        var programacoes = await _dbContext.ProgramacaoRadio
+            .Include(p => p.Emissora)
+            .ToListAsync();
+
+        return programacoes
+            .OrderBy(p => p.DiaSemana)
+            .ThenBy(p => p.HoraInicio)
+            .ToList();
+    }
+    public async Task<List<ProgramacaoRadio>> GetByEmissoraAsync(int emissoraId)
+    {
+        var programacoes = await _dbContext.ProgramacaoRadio
+            .Include(p => p.Emissora)
+            .Where(p => p.EmissoraId == emissoraId)
+            .ToListAsync();
+
+        return programacoes
+            .OrderBy(p => p.DiaSemana)
+            .ThenBy(p => p.HoraInicio)
+            .ToList();
     }
     public async Task<ProgramacaoRadio> GetByIdAsync(int id)
     {
-        return await _dbContext.ProgramacaoRadio.SingleOrDefaultAsync(p => p.Id == id); 
+        return await _dbContext.ProgramacaoRadio
+            .Include(p => p.Emissora)
+            .SingleOrDefaultAsync(p => p.Id == id); 
     }
     public async Task AddAsync(ProgramacaoRadio programacaoRadio)
     {

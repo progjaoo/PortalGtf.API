@@ -38,6 +38,39 @@ public class UsuarioService : IUsuarioService
     {
         return await _authService.LoginAsync(model);
     }
+
+    public async Task AtivarUsuarioAsync(int usuarioId)
+    {
+        var user = await _usuarioRepository.GetByIdAsync(usuarioId);
+
+        if (user == null)
+            throw new Exception("Usuário não encontrado");
+        
+        user.AtivarUsuario();
+        await _usuarioRepository.UpdateAsync(user);
+    }
+    public async Task DesativarUsuarioAsync(int usuarioId)
+    {
+        var user = await _usuarioRepository.GetByIdAsync(usuarioId);
+
+        if (user == null)
+            throw new Exception("Usuário não encontrado");
+        
+        user.DesativarUsuario();
+        await _usuarioRepository.UpdateAsync(user);
+    }
+
+    public async Task UpdateAsync(int id, UsuarioUpdateViewModel model)
+    {
+        var user = await _usuarioRepository.GetByIdAsync(id);
+        
+        user.Email = model.Email;
+        user.NomeCompleto = model.NomeCompleto;
+        user.FuncaoId = model.FuncaoId;
+        
+        await _usuarioRepository.UpdateAsync(user);
+        await _usuarioRepository.SaveChangesAsync();
+    }
     public async Task<UsuarioResponseViewModel?> GetByIdAsync(int id)
     {
         var usuario = await _usuarioRepository.GetByIdAsync(id);
@@ -50,7 +83,7 @@ public class UsuarioService : IUsuarioService
             NomeCompleto = usuario.NomeCompleto,
             StatusUsuario = usuario.StatusUsuario,
             FuncaoId =  usuario.FuncaoId,
-            NomeFuncao = usuario.Funcao.TipoFuncao
+            NomeFuncao = usuario.Funcao.TipoFuncao,
         };
     }
 

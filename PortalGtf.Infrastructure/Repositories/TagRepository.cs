@@ -21,4 +21,9 @@ public class TagRepository : ITagRepository
         await _context.Tag.AddAsync(tag);
         await _context.SaveChangesAsync();
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
 }

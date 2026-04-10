@@ -79,6 +79,12 @@ namespace PortalGtf.API.Controllers
             var result = await _service.GetAllAsync();
             return Ok(result);
         }
+        [HttpGet("mais-lidas")]
+        public async Task<IActionResult> GetMostRead([FromQuery] int? emissoraId = null, [FromQuery] int limit = 4, [FromQuery] int days = 7)
+        {
+            var result = await _service.GetMostReadAsync(emissoraId, limit, days);
+            return Ok(result);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -87,6 +93,18 @@ namespace PortalGtf.API.Controllers
                 return NotFound();
 
             return Ok(result);
+        }
+        [HttpPost("{id}/visualizacao")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterView(int id)
+        {
+            var forwardedFor = Request.Headers["X-Forwarded-For"].FirstOrDefault();
+            var ip = !string.IsNullOrWhiteSpace(forwardedFor)
+                ? forwardedFor.Split(',').FirstOrDefault()?.Trim()
+                : HttpContext.Connection.RemoteIpAddress?.ToString();
+
+            await _service.RegisterViewAsync(id, ip);
+            return NoContent();
         }
         [HttpGet("editorial/{editorialId}")]
         public async Task<IActionResult> GetByEditorial(int editorialId)
@@ -143,7 +161,7 @@ namespace PortalGtf.API.Controllers
             return Ok(result);
         }
         [HttpGet("buscarPorEmissora/{emissoraId}")]
-        public async Task<IActionResult> GetAllByEmissora([FromQuery] int emissoraId)
+        public async Task<IActionResult> GetAllByEmissora(int emissoraId)
         {
             var result = await _service.GetAllPostsByEmissora(emissoraId);
             return Ok(result);
@@ -231,9 +249,9 @@ namespace PortalGtf.API.Controllers
             }
         }
         [HttpPut("{id}/enviar-revisao")] // todo: vai  aparecer para o revisador
-        public async Task<IActionResult> EnviarParaRevisao(int id)
+        public async Task<IActionResult> EnviarParaRevisao(int id, [FromBody] PostEnviarRevisaoViewModel model)
         {
-            await _service.EnviarParaRevisaoAsync(id);
+            await _service.EnviarParaRevisaoAsync(id, model);
             return Ok(new { message = "Post enviado para revisão" });
         }
         [HttpPut("{id}/aprovar")]
@@ -242,6 +260,13 @@ namespace PortalGtf.API.Controllers
             await _service.AprovarPostAsync(id);
 
             return Ok(new { message = "Post aprovado e publicado" });
+        }
+        [HttpPut("{id}/enviarParaAprovacao")]
+        public async Task<IActionResult> EnviarParaAprovacao(int id) 
+        {
+            await _service.EnviarParaAprovacao(id);
+
+            return Ok(new { message = "Post enviado para aprovação" });
         }
         [HttpPut("{id}/rejeitar")]
         public async Task<IActionResult> Rejeitar(int id)

@@ -7,8 +7,10 @@ public class Editorial
     public string TipoPostagem { get; set; } = null!;
     
     public int TemaEditorialId { get; set; }
+    public int EmissoraId { get; set; }
     public ICollection<Subcategoria> Subcategorias { get; set; } = new List<Subcategoria>();
 
     public TemaEditorial TemaEditorial { get; set; } = null!;
+    public Emissora Emissora { get; set; } = null!;
     public ICollection<Post> Posts { get; set; } = new List<Post>();
 }

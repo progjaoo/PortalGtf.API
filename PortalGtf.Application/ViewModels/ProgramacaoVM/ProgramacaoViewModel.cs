@@ -3,6 +3,8 @@ namespace PortalGtf.Application.ViewModels.ProgramacaoVM;
 public class ProgramacaoRadioViewModel
 {
     public int Id { get; set; }
+    public int EmissoraId { get; set; }
+    public string? EmissoraNome { get; set; }
     public string NomePrograma { get; set; }
     public string? Apresentador { get; set; }
     public string? Descricao { get; set; }

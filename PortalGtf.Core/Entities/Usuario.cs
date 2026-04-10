@@ -15,4 +15,19 @@ public class Usuario
     public DateTime DataCriacao { get; set; }
 
     public ICollection<UsuarioEmissora> UsuarioEmissoras { get; set; } = new List<UsuarioEmissora>();
+
+    public void AtivarUsuario()
+    {
+        if (StatusUsuario != StatusUsuario.Pendente && StatusUsuario != StatusUsuario.Bloqueado &&
+            StatusUsuario != StatusUsuario.Inativo)
+            throw new InvalidOperationException("Usuário não pode ser ativado");
+        
+        StatusUsuario = StatusUsuario.Ativo;
+    }
+
+    public void DesativarUsuario()
+    {
+    
+        StatusUsuario = StatusUsuario.Bloqueado;
+    }
 }

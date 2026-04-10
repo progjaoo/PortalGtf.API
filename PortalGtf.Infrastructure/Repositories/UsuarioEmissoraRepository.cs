@@ -15,12 +15,18 @@ public class UsuarioEmissoraRepository : IUsuarioEmissoraRepository
     public async Task<List<UsuarioEmissora>> GetAllAsync()
     {
         return await _dbContext.UsuarioEmissora
+            .Include(ue => ue.Usuario)
+            .Include(ue => ue.Emissora)
+            .Include(ue => ue.Funcao)
             .AsNoTracking()
             .ToListAsync();
     }
     public async Task<UsuarioEmissora?> GetByIdAsync(int id)
     {
         return await _dbContext.UsuarioEmissora
+            .Include(ue => ue.Usuario)
+            .Include(ue => ue.Emissora)
+            .Include(ue => ue.Funcao)
             .AsNoTracking()
             .SingleOrDefaultAsync(ue => ue.Id == id);
     }

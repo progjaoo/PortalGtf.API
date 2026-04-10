@@ -23,6 +23,13 @@ public class ProgramacaoRadioController : ControllerBase
         return Ok(programacao);
     }
 
+    [HttpGet("emissora/{emissoraId}/buscarTodos")]
+    public async Task<IActionResult> GetByEmissora(int emissoraId)
+    {
+        var programacao = await _service.GetByEmissoraAsync(emissoraId);
+        return Ok(programacao);
+    }
+
     /// <summary>
     /// Retorna um programa específico
     /// </summary>

@@ -15,10 +15,18 @@ public class PermissaoRepository : IPermissaoRepository
 
     public async Task<List<Permissao>> GetAllPermissoesByUsuarioAsync(int usuarioId)
     {
-        return await _dbContext.Usuario
+        var permissoesFuncaoPrincipal = _dbContext.Usuario
             .Where(u => u.Id == usuarioId)
             .SelectMany(u => u.Funcao.FuncaoPermissoes)
-            .Select(fp => fp.Permissao)
+            .Select(fp => fp.Permissao);
+
+        var permissoesFuncoesAdicionais = _dbContext.UsuarioEmissora
+            .Where(ue => ue.UsuarioId == usuarioId)
+            .SelectMany(ue => ue.Funcao.FuncaoPermissoes)
+            .Select(fp => fp.Permissao);
+
+        return await permissoesFuncaoPrincipal
+            .Union(permissoesFuncoesAdicionais)
             .Distinct()
             .ToListAsync();
     }
@@ -29,7 +37,6 @@ public class PermissaoRepository : IPermissaoRepository
     public async Task<Permissao> GetById(int id)
     {
         return await _dbContext.Permissao.SingleOrDefaultAsync(p =>  p.Id == id);
-
     }
     public async Task AddAsync(Permissao permissao)
     {

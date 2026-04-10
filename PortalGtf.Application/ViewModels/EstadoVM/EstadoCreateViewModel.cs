@@ -4,4 +4,5 @@ public class EstadoCreateViewModel
 {
     public string Nome { get; set; } = null!;
     public string Sigla { get; set; } = null!;
+    public int RegiaoId { get; set; }
 }

@@ -22,7 +22,10 @@ public class UsuarioEmissoraService : IUsuarioEmissoraService
             Id = ue.Id,
             UsuarioId = ue.UsuarioId,
             EmissoraId = ue.EmissoraId,
-            FuncaoId = ue.FuncaoId
+            FuncaoId = ue.FuncaoId,
+            UsuarioNome = ue.Usuario?.NomeCompleto,
+            EmissoraNome = ue.Emissora?.NomeSocial,
+            FuncaoNome = ue.Funcao?.TipoFuncao,
         }).ToList();
     }
 

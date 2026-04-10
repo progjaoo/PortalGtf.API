@@ -9,4 +9,5 @@ public interface IUsuarioRepository
     Task AddAsync(Usuario usuario);
     Task<Usuario?> GetByEmailAndPasswordAsync(string email, string senhaHash);
     Task UpdateAsync(Usuario usuario);
+    Task SaveChangesAsync();
 }

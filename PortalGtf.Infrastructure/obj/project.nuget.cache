@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TBOrWtyMH5M=",
+  "dgSpecHash": "rqtVWo3rguM=",
   "success": true,
-  "projectFilePath": "/Users/joaomvalente/Documents/PortalGtf/PortalGtf.Infrastructure/PortalGtf.Infrastructure.csproj",
+  "projectFilePath": "/Users/joaomvalente/Downloads/Teste-PORTAL-Jules/PortalGtf/PortalGtf.Infrastructure/PortalGtf.Infrastructure.csproj",
   "expectedPackageFiles": [
     "/Users/joaomvalente/.nuget/packages/microsoft.entityframeworkcore/9.0.0/microsoft.entityframeworkcore.9.0.0.nupkg.sha512",
     "/Users/joaomvalente/.nuget/packages/microsoft.entityframeworkcore.abstractions/9.0.0/microsoft.entityframeworkcore.abstractions.9.0.0.nupkg.sha512",

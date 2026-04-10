@@ -20,6 +20,28 @@ public class ProgramacaoRadioService : IProgramacaoRadioService
         return programacoes.Select(p => new ProgramacaoRadioViewModel
         {
             Id = p.Id,
+            EmissoraId = p.EmissoraId,
+            EmissoraNome = p.Emissora?.NomeSocial,
+            NomePrograma = p.NomePrograma,
+            Apresentador = p.Apresentador,
+            Descricao = p.Descricao,
+            DiaSemana = (int)p.DiaSemana,
+            HoraInicio = p.HoraInicio,
+            HoraFim = p.HoraFim,
+            Imagem = p.Imagem,
+            Ativo = p.Ativo,
+        }).ToList();
+    }
+
+    public async Task<List<ProgramacaoRadioViewModel>> GetByEmissoraAsync(int emissoraId)
+    {
+        var programacoes = await _repository.GetByEmissoraAsync(emissoraId);
+
+        return programacoes.Select(p => new ProgramacaoRadioViewModel
+        {
+            Id = p.Id,
+            EmissoraId = p.EmissoraId,
+            EmissoraNome = p.Emissora?.NomeSocial,
             NomePrograma = p.NomePrograma,
             Apresentador = p.Apresentador,
             Descricao = p.Descricao,
@@ -41,6 +63,8 @@ public class ProgramacaoRadioService : IProgramacaoRadioService
         return new ProgramacaoRadioViewModel
         {
             Id = programaca.Id,
+            EmissoraId = programaca.EmissoraId,
+            EmissoraNome = programaca.Emissora?.NomeSocial,
             NomePrograma = programaca.NomePrograma,
             Apresentador = programaca.Apresentador,
             Descricao = programaca.Descricao,
@@ -56,6 +80,7 @@ public class ProgramacaoRadioService : IProgramacaoRadioService
     {
         var programacao = new ProgramacaoRadio
         {
+            EmissoraId = model.EmissoraId,
             NomePrograma = model.NomePrograma,
             Apresentador = model.Apresentador,
             Descricao = model.Descricao,
@@ -63,7 +88,7 @@ public class ProgramacaoRadioService : IProgramacaoRadioService
             HoraInicio = model.HoraInicio,
             HoraFim = model.HoraFim,
             Imagem = model.Imagem,
-            Ativo = true
+            Ativo = model.Ativo
         };
 
         await _repository.AddAsync(programacao);
@@ -75,6 +100,7 @@ public class ProgramacaoRadioService : IProgramacaoRadioService
         if (programacao == null)
             throw new Exception("Programação não encontrada.");
 
+        programacao.EmissoraId = model.EmissoraId;
         programacao.NomePrograma = model.NomePrograma;
         programacao.Apresentador = model.Apresentador;
         programacao.Descricao = model.Descricao;

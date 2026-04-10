@@ -5,6 +5,7 @@ using PortalGtf.Application.ViewModels.ProgramacaoVM;
 public interface IProgramacaoRadioService
 {
     Task<List<ProgramacaoRadioViewModel>> GetAllAsync();
+    Task<List<ProgramacaoRadioViewModel>> GetByEmissoraAsync(int emissoraId);
 
     Task<ProgramacaoRadioViewModel?> GetByIdAsync(int id);
 

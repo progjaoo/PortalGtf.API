@@ -8,5 +8,6 @@ public class PostHistorico
     public int UsuarioId { get; set; }
     public Usuario Usuario { get; set; } = null!;
     public string Acao { get; set; } = null!;
+    public string? Mensagem { get; set; }
     public DateTime DataAcao { get; set; }
 }

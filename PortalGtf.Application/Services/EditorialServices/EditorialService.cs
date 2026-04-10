@@ -20,8 +20,27 @@ public class EditorialService : IEditorialService
         {
             Id = e.Id,
             TipoPostagem = e.TipoPostagem,
+            TemaEditorialId = e.TemaEditorialId,
+            EmissoraId = e.EmissoraId,
+            EmissoraNome = e.Emissora?.NomeSocial,
         }).ToList();
-    } public async Task<EditorialViewModel?> GetByIdAsync(int id)
+    }
+
+    public async Task<List<EditorialViewModel>> GetByEmissoraAsync(int emissoraId)
+    {
+        var editoriais = await _editorialRepository.GetByEmissoraAsync(emissoraId);
+
+        return editoriais.Select(e => new EditorialViewModel
+        {
+            Id = e.Id,
+            TipoPostagem = e.TipoPostagem,
+            TemaEditorialId = e.TemaEditorialId,
+            EmissoraId = e.EmissoraId,
+            EmissoraNome = e.Emissora?.NomeSocial,
+        }).ToList();
+    }
+
+    public async Task<EditorialViewModel?> GetByIdAsync(int id)
     {
         var editoriais = await _editorialRepository.GetByIdAsync(id);
 
@@ -32,6 +51,9 @@ public class EditorialService : IEditorialService
         {
             Id = editoriais.Id,
             TipoPostagem = editoriais.TipoPostagem,
+            TemaEditorialId = editoriais.TemaEditorialId,
+            EmissoraId = editoriais.EmissoraId,
+            EmissoraNome = editoriais.Emissora?.NomeSocial,
         };
     }
     public async Task<int> CreateAsync(EditorialCreateViewModel model)
@@ -39,7 +61,8 @@ public class EditorialService : IEditorialService
         var editorial = new Editorial
         {
             TipoPostagem = model.TipoPostagem,
-            TemaEditorialId =  model.TemaEditorialId
+            TemaEditorialId =  model.TemaEditorialId,
+            EmissoraId = model.EmissoraId,
         };
         await _editorialRepository.AddAsync(editorial);
         return editorial.Id;
@@ -52,6 +75,8 @@ public class EditorialService : IEditorialService
             return false;
 
         editoriais.TipoPostagem = model.TipoPostagem;
+        editoriais.TemaEditorialId = model.TemaEditorialId;
+        editoriais.EmissoraId = model.EmissoraId;
         
         await _editorialRepository.UpdateAsync(editoriais);
         return true;

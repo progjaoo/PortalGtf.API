@@ -37,6 +37,13 @@ public class EditorialController : ControllerBase
         var editorial = await _editorialService.GetAllAsync();
         return Ok(editorial);
     }
+
+    [HttpGet("emissora/{emissoraId:int}/buscarTodos")]
+    public async Task<IActionResult> GetByEmissora(int emissoraId)
+    {
+        var editorial = await _editorialService.GetByEmissoraAsync(emissoraId);
+        return Ok(editorial);
+    }
     /// <summary>
     /// Cria um novo Editorial
     /// </summary>

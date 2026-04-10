@@ -13,4 +13,5 @@ public class Midia
     public int UsuarioUploadId { get; set; }
 
     public ICollection<PostImagem> PostImagens { get; set; } = new List<PostImagem>();
+    public ICollection<BannerInstitucional> BannersInstitucionais { get; set; } = new List<BannerInstitucional>();
 }

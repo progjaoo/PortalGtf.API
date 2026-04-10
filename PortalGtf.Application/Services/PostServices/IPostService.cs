@@ -18,6 +18,7 @@ public interface IPostService
     Task<List<PostPublicViewModel>> GetAllPublishedAsync();
     Task<List<PostPublicViewModel>> SearchAsync(string query);
     Task<List<PostPublicViewModel>> GetFilteredAsync(PostEnumViewModel filter);
+    Task<List<PostPublicViewModel>> GetMostReadAsync(int? emissoraId, int limit, int days);
     Task<List<PostListViewModel>> GetDestaquesAsync();
     Task<List<PostListViewModel>> GetDestaquesbByFatoPopularAsync();
     Task<List<PostListViewModel>> GetDestaquesbBy88FmAsync();
@@ -27,9 +28,11 @@ public interface IPostService
     //TODO: PARTE DE SEO
     Task<PostDetailViewModel?> GetBySlugAsync(string slug);
     Task<string> GenerateSitemapAsync();
-    Task EnviarParaRevisaoAsync(int postId);
+    Task RegisterViewAsync(int postId, string? ip);
+    Task EnviarParaRevisaoAsync(int postId, PostEnviarRevisaoViewModel model);
     Task AprovarPostAsync(int postId);
     Task RejeitarPostAsync(int postId);
+    Task EnviarParaAprovacao(int postId);
     Task CreateAsync(PostCreateViewModel model);
     Task UpdateAsync(int id, PostUpdateViewModel model);
     Task DeleteAsync(int id);
